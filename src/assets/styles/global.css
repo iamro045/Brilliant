@@ -11,3 +11,32 @@ body {
 .page {
   padding: 2rem;
 }
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.course-card {
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+
+.course-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.course-card {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+}
