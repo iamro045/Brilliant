@@ -40,3 +40,33 @@ body {
 .course-card:hover {
   transform: translateY(-4px);
 }
+
+
+
+.level-list {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.level-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.level-card button {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #111;
+  color: white;
+}
+
+.level-card button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}

@@ -1,7 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+
 import { AuthProvider } from "./context/AuthContext";
+import { XPProvider } from "./context/XPContext";
+import { ProgressProvider } from "./context/ProgressContext";
+
 import App from "./App";
 import "./index.css";
 import "./assets/styles/global.css";
@@ -9,7 +13,11 @@ import "./assets/styles/global.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <AuthProvider>
-      <App />
+      <XPProvider>
+        <ProgressProvider>
+          <App />
+        </ProgressProvider>
+      </XPProvider>
     </AuthProvider>
   </BrowserRouter>
 );
