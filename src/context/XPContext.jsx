@@ -5,7 +5,6 @@ const XPContext = createContext(null);
 export const XPProvider = ({ children }) => {
   const [xp, setXp] = useState(0);
 
-  // restore XP on reload
   useEffect(() => {
     const savedXp = localStorage.getItem("xp");
     if (savedXp) {
@@ -15,14 +14,25 @@ export const XPProvider = ({ children }) => {
 
   const addXp = (amount) => {
     setXp((prev) => {
-      const newXp = prev + amount;
-      localStorage.setItem("xp", newXp);
-      return newXp;
+      const next = prev + amount;
+      localStorage.setItem("xp", next);
+      return next;
     });
   };
 
+  // 🧠 LEVEL CALCULATION
+  const level = Math.floor(xp / 100) + 1;
+  const currentLevelXp = xp % 100;
+
   return (
-    <XPContext.Provider value={{ xp, addXp }}>
+    <XPContext.Provider
+      value={{
+        xp,
+        level,
+        currentLevelXp,
+        addXp,
+      }}
+    >
       {children}
     </XPContext.Provider>
   );
