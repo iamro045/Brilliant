@@ -1,0 +1,31 @@
+.navbar {
+  width: 100vw; /* 👈 IMPORTANT */
+  height: 60px;
+  background-color: #111;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 2rem;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.links a {
+  color: white;
+  text-decoration: none;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
