@@ -4,7 +4,7 @@ import Layout from "./layout/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Courses from "./pages/Courses";
-import Lessons from "./pages/Lessons";
+import Course from "./pages/Course";
 import LessonPlay from "./pages/LessonPlay";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -14,6 +14,7 @@ function App() {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
 
+        {/* Course listing */}
         <Route
           path="/courses"
           element={
@@ -23,15 +24,17 @@ function App() {
           }
         />
 
+        {/* Single course (units + levels) */}
         <Route
           path="/courses/:courseId"
           element={
             <ProtectedRoute>
-              <Lessons />
+              <Course />
             </ProtectedRoute>
           }
         />
 
+        {/* Lesson play */}
         <Route
           path="/lesson/:courseId/:lessonId"
           element={

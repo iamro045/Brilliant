@@ -5,7 +5,6 @@ import { StreakProvider } from "./context/StreakContext";
 import { AuthProvider } from "./context/AuthContext";
 import { XPProvider } from "./context/XPContext";
 import { ProgressProvider } from "./context/ProgressContext";
-
 import App from "./App";
 import "./index.css";
 import "./assets/styles/global.css";

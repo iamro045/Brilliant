@@ -136,3 +136,149 @@ body {
   font-weight: bold;
   margin-top: 1rem;
 }
+
+
+
+.course-page {
+  padding: 2rem;
+}
+
+.course-desc {
+  margin-bottom: 2rem;
+  color: #555;
+}
+
+.unit-section {
+  margin-bottom: 3rem;
+}
+
+.unit-title {
+  margin-bottom: 1rem;
+}
+
+.lessons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.lesson-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+.lesson-card.locked {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.boss-card {
+  margin-top: 1rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #facc15, #f59e0b);
+  color: #111;
+  font-weight: bold;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+
+.locked {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.locked-unit {
+  opacity: 0.6;
+}
+
+.lesson-card {
+  cursor: pointer;
+  position: relative;
+}
+
+.lesson-card:hover {
+  transform: translateY(-2px);
+}
+
+.completed {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 0.9rem;
+}
+
+.unit-progress {
+  margin: 0.5rem 0 1.5rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 4px;
+  display: inline-block;
+}
+
+
+
+.unit-complete {
+  margin-top: 1rem;
+  position: relative;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: #22c55e;
+  color: white;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.confetti span {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: hsl(var(--hue, 200), 80%, 60%);
+  animation: confetti-fall 0.9s ease-out forwards;
+}
+
+.confetti span:nth-child(n) {
+  left: calc(5% * var(--i));
+}
+
+@keyframes confetti-fall {
+  from {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(40px) rotate(180deg);
+    opacity: 0;
+  }
+}
