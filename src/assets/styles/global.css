@@ -1,284 +1,325 @@
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: #f9fafb;
+/* =========================================
+   1. SETUP & THEME VARIABLES
+   ========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg-page: #f7f7f5;
+  --card-bg: #ffffff;
+
+  --primary: #3b82f6;
+  --primary-gradient: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%);
+
+  --accent-gold: #facc15;
+  --accent-green: #22c55e;
+
+  --text-main: #374151;
+  --text-light: #6b7280;
+  --text-header: #111827;
+
+  --path-color: #e5e7eb;
+
+  --radius-xl: 24px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
 }
 
-.app {
-  min-height: 100vh;
-  width: 100%;
+* {
+  box-sizing: border-box;
 }
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, sans-serif;
+  background: var(--bg-page);
+  color: var(--text-main);
+}
+
+/* =========================================
+   2. PAGE LAYOUT
+   ========================================= */
 
 .page {
-  padding: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
 }
 
-.course-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--text-header);
+  margin-bottom: 0.25rem;
 }
 
-.course-card {
-  padding: 1.5rem;
-  border-radius: 8px;
-  background: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-header);
 }
 
-
-.course-link {
-  text-decoration: none;
-  color: inherit;
+.course-desc {
+  color: var(--text-light);
+  margin-bottom: 3rem;
 }
 
-.course-card {
-  cursor: pointer;
-  transition: transform 0.2s ease;
+/* =========================================
+   3. UNIT SECTION
+   ========================================= */
+
+.unit-section {
+  background: var(--card-bg);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem 2rem 3rem;
+  margin-bottom: 4rem;
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.06);
 }
 
-.course-card:hover {
-  transform: translateY(-4px);
-}
-
-
-
-.level-list {
-  display: grid;
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-
-.level-card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.level-card button {
-  margin-top: 1rem;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: #111;
-  color: white;
-}
-
-.level-card button:disabled {
-  background: #aaa;
-  cursor: not-allowed;
-}
-
-
-
-/* ===== Challenge Screen ===== */
-
-.challenge-wrapper {
-  min-height: calc(100vh - 80px);
+.unit-title {
   display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 3rem;
+}
+
+.unit-title::before {
+  content: "#";
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
   justify-content: center;
+  font-weight: 800;
+}
+
+/* =========================================
+   4. VERTICAL MAP (CORE PART)
+   ========================================= */
+
+.unit-map {
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
-.challenge-card {
+.map-node-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Vertical connector */
+.map-line {
+  width: 4px;
+  height: 42px;
+  background: var(--path-color);
+}
+
+/* Lesson node */
+.map-node {
+  width: 260px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
   background: white;
-  padding: 2.5rem;
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.map-node:hover:not(.locked) {
+  transform: translateY(-4px);
+}
+
+/* States */
+.map-node.active {
+  background: var(--primary-gradient);
+  color: white;
+}
+
+.map-node.done {
+  background: var(--accent-green);
+  color: white;
+}
+
+.map-node.locked {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Text inside node */
+.node-title {
+  display: block;
+  font-weight: 600;
+}
+
+.node-xp {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+/* Boss node */
+.map-node.boss {
+  margin-top: 12px;
+  background: #111827;
+  color: var(--accent-gold);
+  font-weight: 700;
+}
+
+/* =========================================
+   5. CHALLENGE SCREEN
+   ========================================= */
+
+.challenge-wrapper {
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+}
+
+.challenge-card {
+  max-width: 600px;
   width: 100%;
-  max-width: 500px;
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
   text-align: center;
 }
 
-.challenge-title {
-  margin-bottom: 1rem;
-}
-
 .challenge-question {
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
 }
 
 .challenge-input {
   width: 100%;
-  padding: 0.8rem;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  text-align: center;
+  border: none;
+  border-bottom: 3px solid #e5e7eb;
+  padding: 1rem;
+  outline: none;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.challenge-input:focus {
+  border-color: var(--primary);
 }
 
 .challenge-btn {
+  margin-top: 3rem;
   width: 100%;
-  padding: 0.8rem;
-  font-size: 1rem;
-  border-radius: 8px;
-  background: #111;
-  color: white;
+  padding: 1.2rem;
+  border-radius: var(--radius-lg);
   border: none;
+  background: #111827;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
 }
 
 .challenge-btn:hover {
-  background: #000;
+  background: black;
 }
 
-.correct-text {
-  color: green;
-  font-weight: bold;
-  margin-top: 1rem;
-}
-
-.wrong-text {
-  color: red;
-  font-weight: bold;
-  margin-top: 1rem;
-}
-
-
-
-.course-page {
-  padding: 2rem;
-}
-
-.course-desc {
-  margin-bottom: 2rem;
-  color: #555;
-}
-
-.unit-section {
-  margin-bottom: 3rem;
-}
-
-.unit-title {
-  margin-bottom: 1rem;
-}
-
-.lessons-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 1rem;
-}
-
-.lesson-card {
-  background: white;
-  padding: 1rem;
-  border-radius: 10px;
-  cursor: pointer;
-  position: relative;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
-}
-
-.lesson-card.locked {
-  opacity: 0.4;
-  pointer-events: none;
-}
-
-.boss-card {
-  margin-top: 1rem;
-  padding: 1.5rem;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #facc15, #f59e0b);
-  color: #111;
-  font-weight: bold;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-}
-
-
-.locked {
-  opacity: 0.4;
-  pointer-events: none;
-}
-
-.locked-unit {
-  opacity: 0.6;
-}
-
-.lesson-card {
-  cursor: pointer;
-  position: relative;
-}
-
-.lesson-card:hover {
-  transform: translateY(-2px);
-}
-
-.completed {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  font-size: 0.9rem;
-}
-
-.unit-progress {
-  margin: 0.5rem 0 1.5rem;
-}
-
-.progress-bar {
-  width: 100%;
-  height: 10px;
-  background: #e5e7eb;
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #22c55e, #16a34a);
-  transition: width 0.3s ease;
-}
-
-.progress-text {
-  font-size: 0.85rem;
-  color: #555;
-  margin-top: 4px;
-  display: inline-block;
-}
-
-
-
-.unit-complete {
-  margin-top: 1rem;
-  position: relative;
-}
+/* =========================================
+   6. BADGES
+   ========================================= */
 
 .badge {
-  display: inline-block;
-  padding: 0.4rem 0.8rem;
-  background: #22c55e;
-  color: white;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  background: var(--accent-gold);
+  color: #713f12;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
-.confetti {
+
+/* Zig-zag path effect */
+.map-node-wrapper:nth-child(even) .map-node {
+  transform: translateX(90px);
+}
+
+.map-node-wrapper:nth-child(odd) .map-node {
+  transform: translateX(-90px);
+}
+
+/* Prevent hover jump conflicts */
+.map-node:hover {
+  transform: translateY(-4px)
+    translateX(var(--zigzag-offset, 0));
+}
+
+.map-node-wrapper:nth-child(even) {
+  --zigzag-offset: 90px;
+}
+
+.map-node-wrapper:nth-child(odd) {
+  --zigzag-offset: -90px;
+}
+
+
+.map-node.active {
+  position: relative;
+}
+
+.map-node.active::after {
+  content: "";
   position: absolute;
-  inset: 0;
-  pointer-events: none;
+  inset: -8px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(59,130,246,0.35),
+    rgba(139,92,246,0.35)
+  );
+  z-index: -1;
+  animation: pulseGlow 1.8s infinite;
 }
 
-.confetti span {
+@keyframes pulseGlow {
+  0% { opacity: 0.4; }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.4; }
+}
+
+
+
+.unit-map {
+  position: relative;
+  padding: 3rem 0;
+}
+
+.unit-map::before {
+  content: "";
   position: absolute;
-  width: 6px;
-  height: 6px;
-  background: hsl(var(--hue, 200), 80%, 60%);
-  animation: confetti-fall 0.9s ease-out forwards;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    var(--path-color),
+    transparent
+  );
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 8px;
 }
 
-.confetti span:nth-child(n) {
-  left: calc(5% * var(--i));
-}
 
-@keyframes confetti-fall {
-  from {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(40px) rotate(180deg);
-    opacity: 0;
-  }
+.map-node.boss {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 6px rgba(250,204,21,0.25),
+              0 20px 40px rgba(0,0,0,0.25);
 }

@@ -1,102 +1,84 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { courses } from "../data/courses";
 import { useProgress } from "../context/ProgressContext";
-import { useState } from "react";
 
 const Course = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const { completed } = useProgress();
-  const [celebratedUnits, setCelebratedUnits] = useState([]);
 
   const course = courses.find((c) => c.id === courseId);
   if (!course) return <p>Course not found</p>;
 
   return (
-    <div className="course-page">
+    <div className="page">
       <h1>{course.title}</h1>
       <p className="course-desc">{course.description}</p>
 
       {course.units.map((unit) => {
-        const normalLessons = unit.lessons.filter((l) => l.type === "normal");
-
-        const completedCount = normalLessons.filter((l) =>
-          completed.includes(l.id)
-        ).length;
-
-        const progressPercent = Math.round(
-          (completedCount / normalLessons.length) * 100
+        const normalLessons = unit.lessons.filter(
+          (l) => l.type === "normal"
         );
-
-        const isCompleted = progressPercent === 100;
-        const alreadyCelebrated = celebratedUnits.includes(unit.unitId);
-
-        // ✅ Mark as celebrated (NO useEffect)
-        if (isCompleted && !alreadyCelebrated) {
-          setCelebratedUnits((prev) => [...prev, unit.unitId]);
-        }
 
         return (
           <div key={unit.unitId} className="unit-section">
-            <h2 className="unit-title">🧩 {unit.title}</h2>
+            <h2 className="unit-title">{unit.title}</h2>
 
-            {/* Progress bar */}
-            <div className="unit-progress">
-              <div className="progress-bar">
-                <div
-                  className="progress-fill"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-              <span className="progress-text">
-                {progressPercent}% completed
-              </span>
-            </div>
+            {/* ✅ VERTICAL MAP START */}
+            <div className="unit-map">
+              {normalLessons.map((lesson, index) => {
+                const prevLesson = normalLessons[index - 1];
 
-            <div className="lessons-grid">
-              {unit.lessons
-                .filter((l) => l.type === "normal")
-                .map((lesson, index) => {
-                  const prevLesson = unit.lessons.filter(
-                    (l) => l.type === "normal"
-                  )[index - 1];
+                const isDone = completed.includes(lesson.id);
+                const isUnlocked =
+                  index === 0 || completed.includes(prevLesson?.id);
 
-                  const isUnlocked =
-                    index === 0 || completed.includes(prevLesson?.id);
-
-                  return (
+                return (
+                  <div key={lesson.id} className="map-node-wrapper">
                     <div
-                      key={lesson.id}
-                      className={`lesson-card ${!isUnlocked ? "locked" : ""}`}
+                      className={`map-node 
+                        ${isDone ? "done" : ""} 
+                        ${isUnlocked ? "active" : "locked"}
+                      `}
                       onClick={() =>
                         isUnlocked &&
                         navigate(`/lesson/${courseId}/${lesson.id}`)
                       }
                     >
-                      <h4>{lesson.title}</h4>
-                      <span>⭐ {lesson.xp} XP</span>
-
-                      {completed.includes(lesson.id) && (
-                        <div className="completed">✅</div>
-                      )}
+                      <span className="node-title">{lesson.title}</span>
+                      <span className="node-xp">⭐ {lesson.xp} XP</span>
                     </div>
-                  );
-                })}
-            </div>
 
-            {isCompleted && (
-              <div className="unit-complete">
-                <div className="badge">🏅 Unit Completed!</div>
-
-                {!alreadyCelebrated && (
-                  <div className="confetti">
-                    {Array.from({ length: 18 }).map((_, i) => (
-                      <span key={i} />
-                    ))}
+                    {/* connector line */}
+                    {index !== normalLessons.length - 1 && (
+                      <div className="map-line" />
+                    )}
                   </div>
-                )}
+                );
+              })}
+
+              {/* 🏆 BOSS NODE */}
+              <div className="map-node-wrapper">
+                <div
+                  className={`map-node boss ${
+                    normalLessons.every((l) => completed.includes(l.id))
+                      ? "active"
+                      : "locked"
+                  }`}
+                  onClick={() =>
+                    normalLessons.every((l) =>
+                      completed.includes(l.id)
+                    ) &&
+                    navigate(
+                      `/lesson/${courseId}/${unit.unitId}-boss`
+                    )
+                  }
+                >
+                  👑 Boss Challenge
+                </div>
               </div>
-            )}
+            </div>
+            {/* ✅ VERTICAL MAP END */}
           </div>
         );
       })}
