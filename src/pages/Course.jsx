@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { courses } from "../data/courses";
 import { useProgress } from "../context/ProgressContext";
+import "./courseMap.css";
 
 const Course = () => {
   const { courseId } = useParams();
@@ -11,45 +12,73 @@ const Course = () => {
   if (!course) return <p>Course not found</p>;
 
   return (
-    <div className="page">
-      <h1>{course.title}</h1>
-      <p className="course-desc">{course.description}</p>
+    <div className="course-layout">
+      {/* LEFT SIDEBAR */}
+      <aside className="course-sidebar">
+        <div className="course-info-card">
+          <h2>{course.title}</h2>
+          <p>{course.description}</p>
 
-      {course.units.map((unit) => {
-        const normalLessons = unit.lessons.filter(
-          (l) => l.type === "normal"
-        );
+          <div className="course-stats">
+            <span>{course.units.length} Units</span>
+            <span>
+              {course.units.reduce(
+                (sum, u) => sum + u.lessons.length,
+                0
+              )}{" "}
+              Lessons
+            </span>
+          </div>
+        </div>
 
-        return (
-          <div key={unit.unitId} className="unit-section">
-            <h2 className="unit-title">{unit.title}</h2>
+        <div className="course-info-card secondary">
+          <h4>Extra Practice</h4>
+          <p>Yes / No · True / False · Debugging</p>
+          <button disabled>Coming Soon</button>
+        </div>
+      </aside>
 
-            {/* ✅ VERTICAL MAP START */}
-            <div className="unit-map">
+      {/* RIGHT MAP */}
+      <main className="course-map">
+        {course.units.map((unit) => {
+          const normalLessons = unit.lessons.filter(
+            (l) => l.type === "normal"
+          );
+
+          return (
+            <section key={unit.unitId} className="unit-map">
+              <h3 className="unit-map-title">{unit.title}</h3>
+
               {normalLessons.map((lesson, index) => {
-                const prevLesson = normalLessons[index - 1];
-
-                const isDone = completed.includes(lesson.id);
-                const isUnlocked =
-                  index === 0 || completed.includes(prevLesson?.id);
+                const prev = normalLessons[index - 1];
+                const unlocked =
+                  index === 0 || completed.includes(prev?.id);
 
                 return (
                   <div key={lesson.id} className="map-node-wrapper">
                     <div
-                      className={`map-node 
-                        ${isDone ? "done" : ""} 
-                        ${isUnlocked ? "active" : "locked"}
-                      `}
+                      className={`map-node ${
+                        completed.includes(lesson.id)
+                          ? "done"
+                          : unlocked
+                          ? "active"
+                          : "locked"
+                      }`}
                       onClick={() =>
-                        isUnlocked &&
-                        navigate(`/lesson/${courseId}/${lesson.id}`)
+                        unlocked &&
+                        navigate(
+                          `/lesson/${courseId}/${lesson.id}`
+                        )
                       }
                     >
-                      <span className="node-title">{lesson.title}</span>
-                      <span className="node-xp">⭐ {lesson.xp} XP</span>
+                      <span className="node-title">
+                        {lesson.title}
+                      </span>
+                      <span className="node-xp">
+                        ⭐ {lesson.xp} XP
+                      </span>
                     </div>
 
-                    {/* connector line */}
                     {index !== normalLessons.length - 1 && (
                       <div className="map-line" />
                     )}
@@ -57,18 +86,11 @@ const Course = () => {
                 );
               })}
 
-              {/* 🏆 BOSS NODE */}
+              {/* BOSS */}
               <div className="map-node-wrapper">
                 <div
-                  className={`map-node boss ${
-                    normalLessons.every((l) => completed.includes(l.id))
-                      ? "active"
-                      : "locked"
-                  }`}
+                  className="map-node boss"
                   onClick={() =>
-                    normalLessons.every((l) =>
-                      completed.includes(l.id)
-                    ) &&
                     navigate(
                       `/lesson/${courseId}/${unit.unitId}-boss`
                     )
@@ -77,11 +99,10 @@ const Course = () => {
                   👑 Boss Challenge
                 </div>
               </div>
-            </div>
-            {/* ✅ VERTICAL MAP END */}
-          </div>
-        );
-      })}
+            </section>
+          );
+        })}
+      </main>
     </div>
   );
 };
