@@ -1,108 +1,97 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { courses } from "../data/courses";
-import { useProgress } from "../context/ProgressContext";
+import { Star, Trophy, Zap, Check, Lock, Play } from "lucide-react";
 import "./courseMap.css";
 
 const Course = () => {
   const { courseId } = useParams();
-  const navigate = useNavigate();
-  const { completed } = useProgress();
+  // Fallback to first course if ID not found (for demo)
+  const course = courses.find((c) => c.id === courseId) || courses[0];
 
-  const course = courses.find((c) => c.id === courseId);
-  if (!course) return <p>Course not found</p>;
+  const getStatus = (index) => {
+    if (index === 0) return "active";
+    if (index < 3) return "completed";
+    return "locked";
+  };
 
   return (
     <div className="course-layout">
-      {/* LEFT SIDEBAR */}
-      <aside className="course-sidebar">
-        <div className="course-info-card">
-          <h2>{course.title}</h2>
-          <p>{course.description}</p>
+      
+      {/* 1. MAIN MAP AREA (Now on Left/Center) */}
+      <main className="course-map">
+        <div className="map-header">
+          <div className="level-badge">UNIT 1</div>
+          <h1>{course.title || "Basics of Algorithms"}</h1>
+          <p>Learn the fundamental building blocks.</p>
+        </div>
 
-          <div className="course-stats">
-            <span>{course.units.length} Units</span>
-            <span>
-              {course.units.reduce(
-                (sum, u) => sum + u.lessons.length,
-                0
-              )}{" "}
-              Lessons
-            </span>
+        <div className="map-path-container">
+          {course.units[0].lessons.map((lesson, index) => {
+            const status = getStatus(index);
+            return (
+              <div className={`node-wrapper ${index % 2 === 0 ? "left" : "right"}`} key={lesson.id}>
+                
+                {/* Floating Label (Tooltip) */}
+                <div className="node-label">
+                    <span className="label-text">{lesson.title}</span>
+                </div>
+
+                {/* BIG Circular Game Node */}
+                <button className={`map-node ${status}`}>
+                  {status === "completed" ? <Check size={40} strokeWidth={4} /> : 
+                   status === "active" ? <Play size={40} fill="white" /> : 
+                   <Lock size={32} />}
+                   
+                   {/* Stars */}
+                   <div className="stars">
+                     {[1,2,3].map(s => <Star key={s} size={14} fill={status === "completed" ? "#FFD700" : "#ddd"} stroke="none"/>)}
+                   </div>
+                </button>
+                
+              </div>
+            );
+          })}
+          
+          {/* BOSS NODE */}
+          <div className="node-wrapper center">
+             <button className="map-node boss">
+                <Trophy size={48} fill="#fff" />
+             </button>
+             <div className="node-label boss-label">Boss Challenge</div>
+          </div>
+        </div>
+      </main>
+
+      {/* 2. SIDEBAR (Now on Right) */}
+      <aside className="course-sidebar">
+        <div className="sidebar-card profile-card">
+          <div className="icon-badge">📘</div>
+          <div>
+            <h2>Current Course</h2>
+            <div className="progress-bar">
+              <div className="progress-fill" style={{ width: "35%" }}></div>
+            </div>
+            <p className="subtext">35% Complete</p>
           </div>
         </div>
 
-        <div className="course-info-card secondary">
-          <h4>Extra Practice</h4>
-          <p>Yes / No · True / False · Debugging</p>
-          <button disabled>Coming Soon</button>
+        <div className="sidebar-card">
+          <h3><Trophy size={20} /> Leaderboard</h3>
+          <div className="rank-row">
+            <span>🥇 You</span>
+            <span className="xp-badge">450 XP</span>
+          </div>
+        </div>
+
+        <div className="sidebar-card highlight call-to-action">
+          <div className="cta-content">
+            <h3><Zap size={20} fill="#FFD700" /> Daily Streak</h3>
+            <p>Keep the fire burning!</p>
+          </div>
+          <button className="primary-btn-3d">DO EXERCISE</button>
         </div>
       </aside>
 
-      {/* RIGHT MAP */}
-      <main className="course-map">
-        {course.units.map((unit) => {
-          const normalLessons = unit.lessons.filter(
-            (l) => l.type === "normal"
-          );
-
-          return (
-            <section key={unit.unitId} className="unit-map">
-              <h3 className="unit-map-title">{unit.title}</h3>
-
-              {normalLessons.map((lesson, index) => {
-                const prev = normalLessons[index - 1];
-                const unlocked =
-                  index === 0 || completed.includes(prev?.id);
-
-                return (
-                  <div key={lesson.id} className="map-node-wrapper">
-                    <div
-                      className={`map-node ${
-                        completed.includes(lesson.id)
-                          ? "done"
-                          : unlocked
-                          ? "active"
-                          : "locked"
-                      }`}
-                      onClick={() =>
-                        unlocked &&
-                        navigate(
-                          `/lesson/${courseId}/${lesson.id}`
-                        )
-                      }
-                    >
-                      <span className="node-title">
-                        {lesson.title}
-                      </span>
-                      <span className="node-xp">
-                        ⭐ {lesson.xp} XP
-                      </span>
-                    </div>
-
-                    {index !== normalLessons.length - 1 && (
-                      <div className="map-line" />
-                    )}
-                  </div>
-                );
-              })}
-
-              {/* BOSS */}
-              <div className="map-node-wrapper">
-                <div
-                  className="map-node boss"
-                  onClick={() =>
-                    navigate(
-                      `/lesson/${courseId}/${unit.unitId}-boss`
-                    )
-                  }
-                >
-                  👑 Boss Challenge
-                </div>
-              </div>
-            </section>
-          );
-        })}
-      </main>
     </div>
   );
 };
