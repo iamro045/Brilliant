@@ -65,9 +65,9 @@ const Course = () => {
       {/* 2. SIDEBAR (Now on Right) */}
       <aside className="course-sidebar">
         <div className="sidebar-card profile-card">
-          <div className="icon-badge">📘</div>
+          <div className="icon-badge"></div>
           <div>
-            <h2>Current Course</h2>
+            <h2> 📘 Current Course</h2>
             <div className="progress-bar">
               <div className="progress-fill" style={{ width: "35%" }}></div>
             </div>
@@ -78,8 +78,8 @@ const Course = () => {
         <div className="sidebar-card">
           <h3><Trophy size={20} /> Leaderboard</h3>
           <div className="rank-row">
-            <span>🥇 You</span>
-            <span className="xp-badge">450 XP</span>
+            <span>🥇 Your </span>
+            <span className="xp-badge"> 450 XP</span>
           </div>
         </div>
 

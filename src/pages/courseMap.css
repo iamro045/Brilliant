@@ -2,7 +2,7 @@
 
 :root {
   --bg-color: #f7f9fc;
-  --sidebar-width: 380px; /* Slightly wider sidebar */
+  --sidebar-width: 580px; /* Slightly wider sidebar */
   --primary: #58cc02;
   --primary-dark: #46a302;
   --secondary: #2b70c9;
@@ -11,7 +11,7 @@
   --text-main: #2c3e50;
   
   /* SIZE SETTINGS */
-  --node-size: 110px; /* MUCH BIGGER NODES */
+  --node-size: 100px; /* MUCH BIGGER NODES */
   --boss-size: 130px;
 }
 
@@ -184,7 +184,10 @@ body {
   width: var(--sidebar-width);
   background: white;
   border-left: 2px solid #e5e5e5; /* Left border now */
-  padding: 2.5rem;
+  padding-top: 5rem;
+  padding-left: 7.5rem;
+  padding-right: 5rem;
+  padding-bottom: 5rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
