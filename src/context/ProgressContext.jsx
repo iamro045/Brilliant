@@ -1,41 +1,46 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
-const ProgressContext = createContext(null);
+const ProgressContext = createContext();
 
 export const ProgressProvider = ({ children }) => {
-  const [completed, setCompleted] = useState([]);
-
-  // restore progress on reload
-  useEffect(() => {
+  const [completedLessons, setCompletedLessons] = useState(() => {
     const saved = localStorage.getItem("completedLessons");
-    if (saved) {
-      setCompleted(JSON.parse(saved));
-    }
-  }, []);
+    return saved ? JSON.parse(saved) : [];
+  });
 
-  const completeLesson = (courseId, lessonId) => {
-    const key = `${courseId}-${lessonId}`;
+  useEffect(() => {
+    localStorage.setItem(
+      "completedLessons",
+      JSON.stringify(completedLessons)
+    );
+  }, [completedLessons]);
 
-    setCompleted((prev) => {
-      if (prev.includes(key)) return prev;
-
-      const updated = [...prev, key];
-      localStorage.setItem(
-        "completedLessons",
-        JSON.stringify(updated)
-      );
-      return updated;
-    });
+  const completeLesson = (lessonId) => {
+    setCompletedLessons((prev) =>
+      prev.includes(lessonId) ? prev : [...prev, lessonId]
+    );
   };
 
   return (
     <ProgressContext.Provider
-      value={{ completed, completeLesson }}
+      value={{ completedLessons, completeLesson }}
     >
       {children}
     </ProgressContext.Provider>
   );
+
+  const getCourseProgress = (courseId, lessons) => {
+  const completedCount = lessons.filter(l =>
+    completed.includes(l.id)
+  ).length;
+
+  return {
+    completedCount,
+    total: lessons.length,
+    percent: Math.round((completedCount / lessons.length) * 100),
+  };
 };
 
-export const useProgress = () =>
-  useContext(ProgressContext);
+};
+
+export const useProgress = () => useContext(ProgressContext);

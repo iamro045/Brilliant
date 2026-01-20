@@ -8,11 +8,11 @@
   --secondary: #2b70c9;
   --locked: #e5e5e5;
   --card-shadow: 4px 4px 0 #2c3e50; /* Stronger sketch shadow */
-  --text-main: #2c3e50;
+  --text-main: #142c45;
   
   /* SIZE SETTINGS */
   --node-size: 100px; /* MUCH BIGGER NODES */
-  --boss-size: 130px;
+  --boss-size: 1 30px;
 }
 
 body {
@@ -233,4 +233,30 @@ body {
 .primary-btn-3d:active {
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 #2c3e50;
+}
+
+.map-node {
+  animation: nodeEnter 0.3s ease-out both;
+}
+
+@keyframes nodeEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.map-node.active::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: rgba(88,204,2,0.35);
+  filter: blur(10px);
+  z-index: -1;
+  animation: glow 1.6s infinite;
 }
