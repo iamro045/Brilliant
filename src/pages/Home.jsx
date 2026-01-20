@@ -62,6 +62,7 @@ const Home = () => {
             <span className="locked-text">Locked</span>
           </div>
         </div>
+        
       </section>
 
     </div>
