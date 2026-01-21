@@ -273,3 +273,137 @@ body {
   60%  { transform: scale(1.15); }
   100% { transform: scale(1); }
 }
+
+
+/* ===============================
+   PATH LINE ANIMATION
+   =============================== */
+
+.path-node-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* Base vertical line */
+.path-line {
+  width: 6px;
+  height: 60px;
+  margin: 8px 0;
+  border-radius: 6px;
+  background: #e5e7eb;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated fill */
+.path-line::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(
+    180deg,
+    #58cc02,
+    #22c55e
+  );
+  animation: drawLine 0.8s ease-out forwards;
+}
+
+/* Completed path */
+.path-complete::after {
+  height: 100%;
+}
+
+/* Locked path (no animation) */
+.path-locked::after {
+  animation: none;
+  height: 0%;
+}
+
+/* Subtle glow pulse for completed paths */
+.path-complete {
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+}
+
+/* Drawing animation */
+@keyframes drawLine {
+  from {
+    height: 0%;
+  }
+  to {
+    height: 100%;
+  }
+}
+
+
+/* ================= SNAKE MAP ================= */
+
+.snake-map {
+  position: relative;
+  width: 100%;
+  min-height: 1400px;
+}
+
+.snake-svg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 1400px;
+  width: 300px;
+  z-index: 1;
+}
+
+/* Background path */
+.snake-path-bg {
+  fill: none;
+  stroke: #e5e7eb;
+  stroke-width: 8;
+}
+
+/* Progress path */
+.snake-path-progress {
+  fill: none;
+  stroke: #58cc02;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 1000;
+  transition: stroke-dashoffset 0.8s ease;
+}
+
+/* ================= NODES ================= */
+
+.snake-node {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.snake-node.left {
+  transform: translateX(-140px);
+}
+
+.snake-node.right {
+  transform: translateX(140px);
+}
+
+.snake-node.center {
+  transform: translateX(-50%);
+}
+
+/* Labels */
+.snake-node .node-label {
+  margin-top: 12px;
+  background: white;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  border: 2px solid #2c3e50;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+}
+ 

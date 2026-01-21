@@ -8,16 +8,12 @@ import "./courseMap.css";
 const Course = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-
   const { completedLessons, getCourseProgress } = useProgress();
 
-  /* ===== SAFETY FALLBACK ===== */
   const course = courses.find((c) => c.id === courseId) || courses[0];
 
-  /* ===== REFS FOR AUTO SCROLL ===== */
   const activeNodeRef = useRef(null);
 
-  /* ===== AUTO SCROLL TO FIRST ACTIVE NODE ===== */
   useEffect(() => {
     if (activeNodeRef.current) {
       activeNodeRef.current.scrollIntoView({
@@ -31,7 +27,6 @@ const Course = () => {
     <div className="course-layout">
       {/* ================= MAP ================= */}
       <main className="course-map">
-        {/* ===== COURSE HEADER ===== */}
         <div className="map-header">
           <h1>{course.title}</h1>
           <p>{course.description}</p>
@@ -40,6 +35,7 @@ const Course = () => {
         {/* ================= MULTI-UNIT STACK ================= */}
         {course.units.map((unit, unitIndex) => {
           const unitProgress = getCourseProgress(unit.lessons);
+          const completedCount = unitProgress.completedCount;
 
           const isBossUnlocked = unit.lessons.every((lesson) =>
             completedLessons.includes(lesson.id)
@@ -49,20 +45,46 @@ const Course = () => {
             <section key={unit.unitId} className="unit-section">
               {/* ===== UNIT HEADER ===== */}
               <div className="unit-header">
-                <div className="level-badge">
-                  UNIT {unitIndex + 1}
-                </div>
+                <div className="level-badge">UNIT {unitIndex + 1}</div>
                 <h2>{unit.title}</h2>
               </div>
 
-              {/* ===== UNIT MAP ===== */}
-              <div className="map-path-container">
+              {/* ===== SVG SNAKE PATH ===== */}
+              <div className="snake-map">
+                <svg
+                  className="snake-svg"
+                  viewBox="0 0 300 1200"
+                  preserveAspectRatio="xMidYMin meet"
+                >
+                  <path
+                    d="
+                      M150 0
+                      C 50 150, 50 300, 150 450
+                      C 250 600, 250 750, 150 900
+                      C 50 1050, 50 1200, 150 1350
+                    "
+                    className="snake-path-bg"
+                  />
+                  <path
+                    d="
+                      M150 0
+                      C 50 150, 50 300, 150 450
+                      C 250 600, 250 750, 150 900
+                      C 50 1050, 50 1200, 150 1350
+                    "
+                    className="snake-path-progress"
+                    style={{
+                      strokeDashoffset:
+                        1000 - completedCount * 180,
+                    }}
+                  />
+                </svg>
+
+                {/* ===== NODES ===== */}
                 {unit.lessons.map((lesson, index) => {
                   const prevLesson = unit.lessons[index - 1];
-
                   const isCompleted =
                     completedLessons.includes(lesson.id);
-
                   const isUnlocked =
                     index === 0 ||
                     completedLessons.includes(prevLesson?.id);
@@ -76,18 +98,11 @@ const Course = () => {
                   return (
                     <div
                       key={lesson.id}
-                      className={`node-wrapper ${
+                      className={`snake-node ${
                         index % 2 === 0 ? "left" : "right"
                       }`}
+                      style={{ top: `${index * 180}px` }}
                     >
-                      {/* LABEL */}
-                      <div className="node-label">
-                        <span className="label-text">
-                          {lesson.title}
-                        </span>
-                      </div>
-
-                      {/* NODE */}
                       <button
                         ref={(el) => {
                           if (
@@ -113,7 +128,6 @@ const Course = () => {
                           <Lock size={32} />
                         )}
 
-                        {/* STARS */}
                         <div className="stars">
                           {[1, 2, 3].map((s) => (
                             <Star
@@ -129,12 +143,21 @@ const Course = () => {
                           ))}
                         </div>
                       </button>
+
+                      <div className="node-label">
+                        {lesson.title}
+                      </div>
                     </div>
                   );
                 })}
 
-                {/* ===== BOSS NODE ===== */}
-                <div className="node-wrapper center">
+                {/* ===== BOSS ===== */}
+                <div
+                  className="snake-node center"
+                  style={{
+                    top: `${unit.lessons.length * 180}px`,
+                  }}
+                >
                   <button
                     className={`map-node boss ${
                       !isBossUnlocked ? "locked" : ""
@@ -186,9 +209,11 @@ const Course = () => {
             <div
               className="progress-fill"
               style={{
-                width: `${getCourseProgress(
-                  course.units.flatMap((u) => u.lessons)
-                ).percent}%`,
+                width: `${
+                  getCourseProgress(
+                    course.units.flatMap((u) => u.lessons)
+                  ).percent
+                }%`,
               }}
             />
           </div>
