@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const ProgressContext = createContext();
 
@@ -17,13 +17,11 @@ export const ProgressProvider = ({ children }) => {
 
   const completeLesson = (lessonId) => {
     setCompletedLessons((prev) =>
-      prev.includes(lessonId)
-        ? prev
-        : [...prev, lessonId]
+      prev.includes(lessonId) ? prev : [...prev, lessonId]
     );
   };
 
-  const getCourseProgress = (lessons) => {
+  const getCourseProgress = (lessons = []) => {
     const completedCount = lessons.filter((l) =>
       completedLessons.includes(l.id)
     ).length;
@@ -31,24 +29,20 @@ export const ProgressProvider = ({ children }) => {
     return {
       completedCount,
       total: lessons.length,
-      percent: Math.round(
-        (completedCount / lessons.length) * 100
-      ),
+      percent:
+        lessons.length === 0
+          ? 0
+          : Math.round((completedCount / lessons.length) * 100),
     };
   };
 
   return (
     <ProgressContext.Provider
-      value={{
-        completedLessons,
-        completeLesson,
-        getCourseProgress,
-      }}
+      value={{ completedLessons, completeLesson, getCourseProgress }}
     >
       {children}
     </ProgressContext.Provider>
   );
 };
 
-export const useProgress = () =>
-  useContext(ProgressContext);
+export const useProgress = () => useContext(ProgressContext);

@@ -406,4 +406,179 @@ body {
   border: 2px solid #2c3e50;
   box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
 }
- 
+/* ================= COURSE ONLY ================= */
+
+.course-layout {
+  display: flex;
+  height: 100vh;
+}
+
+.course-map {
+  flex: 1;
+  overflow-y: auto;
+  padding: 3rem 2rem;
+  background: radial-gradient(#e5e7eb 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.course-map-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.course-unit {
+  position: relative;
+  margin-bottom: 6rem;
+}
+
+.course-unit-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.course-unit-badge {
+  background: #2563eb;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* ===== PATH ===== */
+.course-path {
+  position: relative;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.course-path-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.course-path-line {
+  fill: none;
+  stroke: #d1d5db;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 6 12;
+  animation: pathMove 6s linear infinite;
+}
+
+@keyframes pathMove {
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+/* ===== NODES ===== */
+.course-node-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 90px 0;
+  z-index: 2;
+}
+
+.course-node-wrapper.left {
+  transform: translateX(-70px);
+}
+
+.course-node-wrapper.right {
+  transform: translateX(70px);
+}
+
+.course-node {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  border: 5px solid white;
+  box-shadow: 0 10px 0 #cbd5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.25s;
+}
+
+.course-node.active {
+  background: #3b82f6;
+  box-shadow: 0 10px 0 #1d4ed8;
+  animation: bounce 1.2s infinite;
+}
+
+.course-node.completed {
+  background: #facc15;
+  box-shadow: 0 10px 0 #ca8a04;
+}
+
+.course-node.locked {
+  background: #e5e7eb;
+  cursor: not-allowed;
+}
+
+.course-node.boss {
+  background: #ef4444;
+  box-shadow: 0 12px 0 #991b1b;
+}
+
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ===== LABELS ===== */
+.course-node-label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.course-node-wrapper.left .course-node-label {
+  right: 120%;
+}
+
+.course-node-wrapper.right .course-node-label {
+  left: 120%;
+}
+
+.course-node-label.boss {
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ===== STARS ===== */
+.course-stars {
+  position: absolute;
+  bottom: -24px;
+  display: flex;
+  gap: 4px;
+  background: white;
+  padding: 4px 8px;
+  border-radius: 20px;
+}
+
+/* ===== PROGRESS ===== */
+.course-progress-bar {
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.course-progress-fill {
+  height: 100%;
+  background: #22c55e;
+  transition: width 0.4s ease;
+}
