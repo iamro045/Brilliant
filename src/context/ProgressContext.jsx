@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const ProgressContext = createContext();
 
+/* ================= PROVIDER ================= */
 export const ProgressProvider = ({ children }) => {
   const [completedLessons, setCompletedLessons] = useState(() => {
     const saved = localStorage.getItem("completedLessons");
@@ -21,26 +22,33 @@ export const ProgressProvider = ({ children }) => {
     );
   };
 
+  /* 🔹 Course progress helper */
+  const getCourseProgress = (lessons) => {
+    const completedCount = lessons.filter((l) =>
+      completedLessons.includes(l.id)
+    ).length;
+
+    return {
+      completedCount,
+      total: lessons.length,
+      percent: Math.round(
+        (completedCount / lessons.length) * 100
+      ),
+    };
+  };
+
   return (
     <ProgressContext.Provider
-      value={{ completedLessons, completeLesson }}
+      value={{
+        completedLessons,
+        completeLesson,
+        getCourseProgress,
+      }}
     >
       {children}
     </ProgressContext.Provider>
   );
-
-  const getCourseProgress = (courseId, lessons) => {
-  const completedCount = lessons.filter(l =>
-    completed.includes(l.id)
-  ).length;
-
-  return {
-    completedCount,
-    total: lessons.length,
-    percent: Math.round((completedCount / lessons.length) * 100),
-  };
 };
 
-};
-
+/* ================= HOOK ================= */
 export const useProgress = () => useContext(ProgressContext);

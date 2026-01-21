@@ -1,30 +1,31 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { courses } from "../data/courses";
 import { Star, Trophy, Zap, Check, Lock, Play } from "lucide-react";
-import "./courseMap.css";
 import { useProgress } from "../context/ProgressContext";
-
+import "./courseMap.css";
 
 const Course = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
 
-  // Fallback for safety
+  const { completedLessons, getCourseProgress } = useProgress();
+
+  /* ===== SAFETY FALLBACK ===== */
   const course = courses.find((c) => c.id === courseId) || courses[0];
 
-  // TEMP demo logic (we’ll replace with real progress later)
-  const getStatus = (index) => {
-    if (index === 0) return "active";
-    if (index < 3) return "completed";
-    return "locked";
-  };
-
-  // ✅ Pick FIRST UNIT for now (Unit 1 map)
+  /* ===== FOR NOW: UNIT 1 ===== */
   const unit = course.units[0];
+
+  const courseProgress = getCourseProgress(unit.lessons);
+
+  /* ===== BOSS UNLOCK ===== */
+  const isBossUnlocked = unit.lessons.every((l) =>
+    completedLessons.includes(l.id)
+  );
 
   return (
     <div className="course-layout">
-      {/* ================= MAIN MAP ================= */}
+      {/* ================= MAP ================= */}
       <main className="course-map">
         <div className="map-header">
           <div className="level-badge">UNIT 1</div>
@@ -32,27 +33,43 @@ const Course = () => {
           <p>{course.description}</p>
         </div>
 
-        {/* ======= DUOLINGO STYLE MAP ======= */}
         <div className="map-path-container">
           {unit.lessons.map((lesson, index) => {
-            const status = getStatus(index);
+            const prevLesson = unit.lessons[index - 1];
+
+            const isCompleted = completedLessons.includes(lesson.id);
+            const isUnlocked =
+              index === 0 ||
+              completedLessons.includes(prevLesson?.id);
+
+            const status = isCompleted
+              ? "completed"
+              : isUnlocked
+              ? "active"
+              : "locked";
 
             return (
               <div
                 key={lesson.id}
-                className={`node-wrapper ${index % 2 === 0 ? "left" : "right"}`}
+                className={`node-wrapper ${
+                  index % 2 === 0 ? "left" : "right"
+                }`}
               >
-                {/* Floating label */}
+                {/* LABEL */}
                 <div className="node-label">
-                  <span className="label-text">{lesson.title}</span>
+                  <span className="label-text">
+                    {lesson.title}
+                  </span>
                 </div>
 
-                {/* Big circular node */}
+                {/* NODE */}
                 <button
                   className={`map-node ${status}`}
                   onClick={() =>
                     status !== "locked" &&
-                    navigate(`/lesson/${courseId}/${lesson.id}`)
+                    navigate(
+                      `/lesson/${courseId}/${lesson.id}`
+                    )
                   }
                 >
                   {status === "completed" ? (
@@ -63,13 +80,17 @@ const Course = () => {
                     <Lock size={32} />
                   )}
 
-                  {/* Stars */}
+                  {/* STARS */}
                   <div className="stars">
                     {[1, 2, 3].map((s) => (
                       <Star
                         key={s}
                         size={14}
-                        fill={status === "completed" ? "#FFD700" : "#ddd"}
+                        fill={
+                          status === "completed"
+                            ? "#FFD700"
+                            : "#ddd"
+                        }
                         stroke="none"
                       />
                     ))}
@@ -79,12 +100,28 @@ const Course = () => {
             );
           })}
 
-          {/* ======= BOSS NODE ======= */}
+          {/* ================= BOSS ================= */}
           <div className="node-wrapper center">
-            <button className="map-node boss">
+            <button
+              className={`map-node boss ${
+                !isBossUnlocked ? "locked" : ""
+              }`}
+              disabled={!isBossUnlocked}
+              onClick={() =>
+                isBossUnlocked &&
+                navigate(
+                  `/lesson/${courseId}/${unit.bossLessonId}`
+                )
+              }
+            >
               <Trophy size={48} fill="#fff" />
             </button>
-            <div className="node-label boss-label">Boss Challenge</div>
+
+            <div className="node-label boss-label">
+              {isBossUnlocked
+                ? "Boss Challenge"
+                : "Complete all lessons"}
+            </div>
           </div>
         </div>
       </main>
@@ -93,10 +130,19 @@ const Course = () => {
       <aside className="course-sidebar">
         <div className="sidebar-card profile-card">
           <h2>📘 Current Course</h2>
+
           <div className="progress-bar">
-            <div className="progress-fill" style={{ width: "35%" }} />
+            <div
+              className="progress-fill"
+              style={{
+                width: `${courseProgress.percent}%`,
+              }}
+            />
           </div>
-          <p className="subtext">35% Complete</p>
+
+          <p className="subtext">
+            {courseProgress.percent}% Complete
+          </p>
         </div>
 
         <div className="sidebar-card">
@@ -114,7 +160,9 @@ const Course = () => {
             <Zap size={20} fill="#FFD700" /> Daily Streak
           </h3>
           <p>Keep the fire burning!</p>
-          <button className="primary-btn-3d">DO EXERCISE</button>
+          <button className="primary-btn-3d">
+            DO EXERCISE
+          </button>
         </div>
       </aside>
     </div>
