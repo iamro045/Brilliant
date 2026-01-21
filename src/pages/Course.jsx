@@ -2,6 +2,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { courses } from "../data/courses";
 import { Star, Trophy, Zap, Check, Lock, Play } from "lucide-react";
 import "./courseMap.css";
+import { useProgress } from "../context/ProgressContext";
+
 
 const Course = () => {
   const { courseId } = useParams();
