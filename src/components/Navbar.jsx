@@ -1,37 +1,52 @@
-import { Link } from "react-router-dom";
-import XPBar from "./XPBar";
+import { useState } from "react";
 import "./Navbar.css";
 
 const Navbar = () => {
+  const [open, setOpen] = useState(false);
+
+  // mock user (replace with AuthContext later)
+  const user = {
+    name: "Rohit",
+    avatar: "https://ui-avatars.com/api/?name=Rohit"
+  };
+
   return (
-    <header className="navbar">
-      <div className="navbar-inner">
-        {/* LEFT */}
-        <div className="navbar-left">
-          <Link to="/" className="navbar-logo">
-            Groott
-          </Link>
-
-          <nav className="navbar-links">
-            <Link to="/" className="nav-link">Home</Link>
-            <Link to="/courses" className="nav-link">Courses</Link>
-          </nav>
-        </div>
-
-        {/* RIGHT */}
-        <div className="navbar-right">
-          <XPBar />
-
-          <div className="navbar-streak">
-            🔥 <span>0</span>
-          </div>
-
-          <Link to="/login" className="nav-link login-link">
-            Login
-          </Link>
-        </div>
+    <nav className="navbar">
+      <div className="nav-left">
+        <h2 className="logo">Groott</h2>
       </div>
-    </header>
+
+      <div className="nav-right">
+        {!user ? (
+          <a className="nav-link" href="/login">Login</a>
+        ) : (
+          <div className="profile-menu">
+            <img
+              src={user.avatar}
+              alt="avatar"
+              className="avatar"
+              onClick={() => setOpen(!open)}
+            />
+
+            {open && (
+              <div className="dropdown">
+                <div className="dropdown-user">
+                  <strong>{user.name}</strong>
+                  <span>Student</span>
+                </div>
+
+                <a href="/dashboard">Dashboard</a>
+                <a href="/courses">Courses</a>
+
+                <button className="logout-btn">
+                  Log out
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </nav>
   );
 };
 

@@ -1,91 +1,81 @@
-/* =========================
-   NAVBAR (SCOPED)
-========================= */
-
 .navbar {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-
   height: 64px;
-  background: linear-gradient(90deg, #0f172a, #020617);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* INNER WRAPPER */
-.navbar-inner {
-  max-width: 1200px;
-  height: 100%;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-
+  background: linear-gradient(90deg, #020617, #020617);
+  color: white;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-}
-
-/* LEFT SIDE */
-.navbar-left {
-  display: flex;
+  padding: 0 1.5rem;
   align-items: center;
-  gap: 2rem;
 }
 
-/* LOGO */
-.navbar-logo {
-  font-size: 1.4rem;
+.logo {
   font-weight: 800;
-  color: #ffffff;
-  text-decoration: none;
-  letter-spacing: 0.5px;
+  font-size: 1.2rem;
 }
 
-/* NAV LINKS */
-.navbar-links {
+.nav-right {
   display: flex;
-  gap: 1.2rem;
+  align-items: center;
 }
 
-.nav-link {
-  color: #cbd5f5;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.95rem;
-  padding: 6px 10px;
+.profile-menu {
+  position: relative;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #3b82f6;
+}
+
+/* DROPDOWN */
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 48px;
+  background: white;
+  color: #0f172a;
+  border-radius: 12px;
+  width: 200px;
+  padding: 0.8rem;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  z-index: 50;
+}
+
+.dropdown-user {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.dropdown-user span {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.dropdown a {
+  display: block;
+  padding: 8px;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  font-weight: 600;
+  color: #0f172a;
+  text-decoration: none;
 }
 
-.nav-link:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
+.dropdown a:hover {
+  background: #f1f5f9;
 }
 
-/* RIGHT SIDE */
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-}
-
-/* STREAK */
-.navbar-streak {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 6px 12px;
-  border-radius: 999px;
+.logout-btn {
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  background: #ef4444;
+  color: white;
   font-weight: 700;
-  color: #facc15;
-  font-size: 0.9rem;
-}
-
-/* LOGIN LINK */
-.login-link {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.login-link:hover {
-  border-color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
 }
