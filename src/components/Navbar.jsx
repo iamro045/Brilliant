@@ -1,30 +1,41 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "./Navbar.css";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+  const navigate = useNavigate();
 
-  // mock user (replace with AuthContext later)
-  const user = {
-    name: "Rohit",
-    avatar: "https://ui-avatars.com/api/?name=Rohit"
-  };
+  const { user, logout } = useAuth();
+
+  /* CLOSE DROPDOWN ON OUTSIDE CLICK */
+  useEffect(() => {
+    const handler = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   return (
     <nav className="navbar">
-      <div className="nav-left">
-        <h2 className="logo">Groott</h2>
-      </div>
+      <h2 className="logo">Groott</h2>
 
       <div className="nav-right">
         {!user ? (
-          <a className="nav-link" href="/login">Login</a>
+          <NavLink className="nav-link" to="/login">
+            Login
+          </NavLink>
         ) : (
-          <div className="profile-menu">
+          <div className="profile-menu" ref={menuRef}>
             <img
               src={user.avatar}
-              alt="avatar"
               className="avatar"
+              alt="avatar"
               onClick={() => setOpen(!open)}
             />
 
@@ -32,13 +43,24 @@ const Navbar = () => {
               <div className="dropdown">
                 <div className="dropdown-user">
                   <strong>{user.name}</strong>
-                  <span>Student</span>
+                  <span>{user.role}</span>
                 </div>
 
-                <a href="/dashboard">Dashboard</a>
-                <a href="/courses">Courses</a>
+                <NavLink to="/dashboard" onClick={() => setOpen(false)}>
+                  Dashboard
+                </NavLink>
 
-                <button className="logout-btn">
+                <NavLink to="/courses" onClick={() => setOpen(false)}>
+                  Courses
+                </NavLink>
+
+                <button
+                  className="logout-btn"
+                  onClick={() => {
+                    logout();
+                    navigate("/login");
+                  }}
+                >
                   Log out
                 </button>
               </div>

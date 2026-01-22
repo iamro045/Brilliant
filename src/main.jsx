@@ -15,10 +15,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <XPProvider>
         <ProgressProvider>
           <StreakProvider>
-          <App />
+            <AuthProvider>
+              <App />
+            </AuthProvider>
           </StreakProvider>
         </ProgressProvider>
       </XPProvider>
     </AuthProvider>
-  </BrowserRouter>
+  </BrowserRouter>,
 );

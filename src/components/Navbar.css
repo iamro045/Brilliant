@@ -1,81 +1,101 @@
+/* ================= NAVBAR ================= */
 .navbar {
   height: 64px;
-  background: linear-gradient(90deg, #020617, #020617);
-  color: white;
+  padding: 0 24px;
+  background: linear-gradient(180deg, #020617, #020617ee);
   display: flex;
-  justify-content: space-between;
-  padding: 0 1.5rem;
   align-items: center;
+  justify-content: space-between;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .logo {
+  font-size: 1.4rem;
   font-weight: 800;
-  font-size: 1.2rem;
+  letter-spacing: 0.5px;
 }
 
-.nav-right {
-  display: flex;
-  align-items: center;
-}
-
+/* ================= PROFILE ================= */
 .profile-menu {
   position: relative;
 }
 
 .avatar {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   cursor: pointer;
   border: 2px solid #3b82f6;
 }
 
-/* DROPDOWN */
+/* ================= DROPDOWN ================= */
 .dropdown {
   position: absolute;
+  top: 52px;
   right: 0;
-  top: 48px;
+  width: 220px;
   background: white;
-  color: #0f172a;
-  border-radius: 12px;
-  width: 200px;
-  padding: 0.8rem;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-  z-index: 50;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  padding: 12px;
+  animation: dropdownIn 0.18s ease-out forwards;
+  transform-origin: top right;
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .dropdown-user {
+  padding-bottom: 10px;
   border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 0.6rem;
-  margin-bottom: 0.6rem;
+  margin-bottom: 8px;
+}
+
+.dropdown-user strong {
+  display: block;
 }
 
 .dropdown-user span {
-  font-size: 0.75rem;
-  color: #64748b;
+  font-size: 0.8rem;
+  color: #6b7280;
 }
 
 .dropdown a {
   display: block;
-  padding: 8px;
-  border-radius: 8px;
-  font-weight: 600;
-  color: #0f172a;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: #111827;
+  font-weight: 500;
   text-decoration: none;
 }
 
 .dropdown a:hover {
-  background: #f1f5f9;
+  background: #f3f4f6;
 }
 
 .logout-btn {
   width: 100%;
-  margin-top: 6px;
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
+  margin-top: 8px;
   background: #ef4444;
   color: white;
-  font-weight: 700;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
   cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
 }
