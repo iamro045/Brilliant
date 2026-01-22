@@ -1,35 +1,21 @@
-import { useXP } from "../context/XPContext";
+import "./XPBar.css";
 
 const XPBar = () => {
-  const { level, currentLevelXp } = useXP();
+  const currentXP = 0;
+  const maxXP = 100;
 
   return (
-    <div style={{ minWidth: "160px" }}>
-      <div style={{ fontSize: "0.8rem" }}>
-        Level {level}
-      </div>
-
-      <div
-        style={{
-          background: "#444",
-          height: "8px",
-          borderRadius: "4px",
-          overflow: "hidden",
-          marginTop: "4px",
-        }}
-      >
+    <div className="xpbar">
+      <span className="xp-label">Level 1</span>
+      <div className="xp-track">
         <div
-          style={{
-            width: `${currentLevelXp}%`,
-            background: "#facc15",
-            height: "100%",
-          }}
+          className="xp-fill"
+          style={{ width: `${(currentXP / maxXP) * 100}%` }}
         />
       </div>
-
-      <div style={{ fontSize: "0.7rem" }}>
-        {currentLevelXp} / 100 XP
-      </div>
+      <span className="xp-value">
+        {currentXP}/{maxXP} XP
+      </span>
     </div>
   );
 };

@@ -1,0 +1,30 @@
+.xpbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e5e7eb;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.xp-label {
+  color: #a5b4fc;
+}
+
+.xp-track {
+  width: 80px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+  transition: width 0.4s ease;
+}
+
+.xp-value {
+  color: #cbd5f5;
+}

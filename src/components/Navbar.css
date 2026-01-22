@@ -1,29 +1,91 @@
+/* =========================
+   NAVBAR (SCOPED)
+========================= */
+
 .navbar {
-  width: 100vw; /* 👈 IMPORTANT */
-  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  height: 64px;
+  background: linear-gradient(90deg, #0f172a, #020617);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* INNER WRAPPER */
+.navbar-inner {
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #0f172a;
-  color: white;
-  padding: 14px 24px;
 }
 
-.logo {
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.links {
+/* LEFT SIDE */
+.navbar-left {
   display: flex;
-  gap: 1.5rem;
+  align-items: center;
+  gap: 2rem;
 }
 
-.links a {
-  color: white;
+/* LOGO */
+.navbar-logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ffffff;
   text-decoration: none;
+  letter-spacing: 0.5px;
 }
 
-.links a:hover {
-  text-decoration: underline;
+/* NAV LINKS */
+.navbar-links {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.nav-link {
+  color: #cbd5f5;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+/* RIGHT SIDE */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+/* STREAK */
+.navbar-streak {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  color: #facc15;
+  font-size: 0.9rem;
+}
+
+/* LOGIN LINK */
+.login-link {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.login-link:hover {
+  border-color: rgba(255, 255, 255, 0.4);
 }

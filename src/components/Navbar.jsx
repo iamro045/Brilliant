@@ -1,26 +1,37 @@
 import { Link } from "react-router-dom";
-import { useXP } from "../context/XPContext";
 import XPBar from "./XPBar";
 import "./Navbar.css";
-import { useStreak } from "../context/StreakContext";
 
 const Navbar = () => {
-  const { xp } = useXP();
-  const { streak } = useStreak();
-
-
   return (
-    <nav className="navbar">
-      <h3 className="logo">Groott</h3>
+    <header className="navbar">
+      <div className="navbar-inner">
+        {/* LEFT */}
+        <div className="navbar-left">
+          <Link to="/" className="navbar-logo">
+            Groott
+          </Link>
 
-      <div className="links">
-        <XPBar />
-        <span>🔥 {streak}</span>
-        <Link to="/">Home</Link>
-        <Link to="/courses">Courses</Link>
-        <Link to="/login">Login</Link>
+          <nav className="navbar-links">
+            <Link to="/" className="nav-link">Home</Link>
+            <Link to="/courses" className="nav-link">Courses</Link>
+          </nav>
+        </div>
+
+        {/* RIGHT */}
+        <div className="navbar-right">
+          <XPBar />
+
+          <div className="navbar-streak">
+            🔥 <span>0</span>
+          </div>
+
+          <Link to="/login" className="nav-link login-link">
+            Login
+          </Link>
+        </div>
       </div>
-    </nav>
+    </header>
   );
 };
 
