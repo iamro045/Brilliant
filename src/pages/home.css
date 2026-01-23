@@ -63,3 +63,59 @@
 .feature-card h3 {
   margin: 0.6rem 0;
 }
+
+
+.home-hero {
+  padding-top: 140px;   /* ⬅️ increased top spacing */
+  padding-bottom: 80px;
+  text-align: center;
+}
+
+
+/* HERO SPACING */
+.hero {
+  padding-top: 140px;   /* pushes hero below navbar */
+  padding-bottom: 90px;
+  text-align: center;
+}
+
+/* HEADLINE */
+.hero-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: #475569;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ACCENT */
+.accent {
+  color: #6366f1;
+}
+
+/* TYPING EFFECT */
+.typing {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid #6366f1;
+  padding-right: 6px;
+  animation: typing 2s steps(5, end), blink 0.7s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 5ch }
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}

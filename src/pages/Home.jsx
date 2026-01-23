@@ -6,10 +6,11 @@ const Home = () => {
     <div className="home">
       {/* HERO */}
       <section className="hero">
-        <h1>
-          Learn to <span>Think</span>, not just code.
+        <h1 className="hero-title">
+          Learn to <span className="typing accent">Think</span>, not just code.
         </h1>
-        <p>
+
+        <p className="hero-subtitle">
           Groott helps you build logic, problem-solving, and coding skills
           step by step — like a game.
         </p>
