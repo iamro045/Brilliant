@@ -151,3 +151,44 @@
     box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
   }
 }
+
+
+/* ===== CARD HOVER LIFT ===== */
+.course-card,
+.stat-card,
+.path-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.course-card:hover,
+.stat-card:hover,
+.path-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== STAT SHIMMER ===== */
+.stat-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 120%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+
+.stat-card:hover::after {
+  left: 120%;
+}

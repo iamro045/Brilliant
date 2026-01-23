@@ -11,8 +11,8 @@ const Home = () => {
         </h1>
 
         <p className="hero-subtitle">
-          Groott helps you build logic, problem-solving, and coding skills
-          step by step — like a game.
+          Groott helps you build logic, problem-solving, and coding skills step
+          by step — like a game.
         </p>
 
         <div className="hero-actions">
@@ -40,6 +40,36 @@ const Home = () => {
         <div className="feature-card">
           🚀 <h3>From Zero to Real Skills</h3>
           <p>No boring theory dumps.</p>
+        </div>
+      </section>
+
+      <section className="hero">
+        <div className="hero-content">
+          <h1 className="hero-title">
+            Learn to <span>Think</span>, not just code.
+          </h1>
+
+          <p className="hero-subtitle">
+            Groott helps you build logic, problem-solving, and coding skills
+            step by step — like a game.
+          </p>
+
+          <div className="hero-actions">
+            <Link to="/signup" className="primary-btn">
+              Start Learning Free
+            </Link>
+            <Link to="/login" className="secondary-btn">
+              I already have an account
+            </Link>
+          </div>
+        </div>
+
+        {/* 🌟 HERO ILLUSTRATION */}
+        <div className="hero-illustration float">
+          <img
+            src="/assets/hero-illustration.svg"
+            alt="Learning illustration"
+          />
         </div>
       </section>
     </div>
