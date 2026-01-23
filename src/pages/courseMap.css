@@ -582,3 +582,65 @@ body {
   background: #22c55e;
   transition: width 0.4s ease;
 }
+
+
+.map-node.active {
+  animation: unlockBounce 0.45s ease;
+}
+
+@keyframes unlockBounce {
+  0% {
+    transform: scale(0.85);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+.map-node.active::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: inherit;
+  background: radial-gradient(
+    rgba(99,102,241,0.35),
+    transparent 60%
+  );
+  animation: glowPulse 2s infinite;
+  z-index: -1;
+}
+
+@keyframes glowPulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.4; }
+}
+
+
+.map-path-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 6px;
+  margin: auto;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    #6366f1,
+    transparent
+  );
+  animation: pathFlow 3s infinite;
+}
+
+@keyframes pathFlow {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
+}

@@ -1,0 +1,65 @@
+.home {
+  padding: 4rem 2rem 6rem;
+  text-align: center;
+}
+
+/* HERO */
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 900;
+}
+
+.hero h1 span {
+  color: #6366f1;
+}
+
+.hero p {
+  max-width: 620px;
+  margin: 1.2rem auto 2.5rem;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primary-btn {
+  background: #6366f1;
+  color: white;
+  padding: 0.9rem 1.6rem;
+  border-radius: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.secondary-btn {
+  border: 2px solid #6366f1;
+  color: #6366f1;
+  padding: 0.9rem 1.6rem;
+  border-radius: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* FEATURES */
+.features {
+  margin-top: 5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+.feature-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.feature-card h3 {
+  margin: 0.6rem 0;
+}

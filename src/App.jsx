@@ -15,7 +15,9 @@ function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
+
+      
+        
 
         {/* Course listing */}
         <Route

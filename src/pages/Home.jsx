@@ -1,70 +1,46 @@
 import { Link } from "react-router-dom";
-import "../assets/styles/home.css";
+import "./home.css";
 
 const Home = () => {
   return (
-    <div className="home-page">
+    <div className="home">
+      {/* HERO */}
+      <section className="hero">
+        <h1>
+          Learn to <span>Think</span>, not just code.
+        </h1>
+        <p>
+          Groott helps you build logic, problem-solving, and coding skills
+          step by step — like a game.
+        </p>
 
-      {/* HERO / CONTINUE */}
-      <section className="home-hero">
-        <h1>Continue Learning</h1>
-
-        <div className="continue-card">
-          <div className="continue-info">
-            <h2>Think Like a Computer</h2>
-            <p>Unit 1 · Instructions & Steps</p>
-
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: "35%" }} />
-            </div>
-          </div>
-
-          <Link to="/courses/think-like-a-computer" className="continue-btn">
-            ▶ Continue
+        <div className="hero-actions">
+          <Link to="/signup" className="primary-btn">
+            Start Learning Free
+          </Link>
+          <Link to="/login" className="secondary-btn">
+            I already have an account
           </Link>
         </div>
       </section>
 
-      {/* STATS */}
-      <section className="home-stats">
-        <div className="stat-card">
-          <span className="stat-value">🔥 5</span>
-          <span className="stat-label">Day Streak</span>
+      {/* FEATURES */}
+      <section className="features">
+        <div className="feature-card">
+          🧠 <h3>Think Like a Computer</h3>
+          <p>Build logic before syntax.</p>
         </div>
 
-        <div className="stat-card">
-          <span className="stat-value">⚡ 420</span>
-          <span className="stat-label">Total XP</span>
+        <div className="feature-card">
+          🎮 <h3>Game-style Learning</h3>
+          <p>XP, streaks, levels & challenges.</p>
         </div>
 
-        <div className="stat-card">
-          <span className="stat-value">🏆 3</span>
-          <span className="stat-label">Level</span>
+        <div className="feature-card">
+          🚀 <h3>From Zero to Real Skills</h3>
+          <p>No boring theory dumps.</p>
         </div>
       </section>
-
-      {/* LEARNING PATHS */}
-      <section className="home-paths">
-        <h2>Your Learning Paths</h2>
-
-        <div className="paths-grid">
-          <Link to="/courses/think-like-a-computer" className="path-card">
-            <h3>🧠 Think Like a Computer</h3>
-            <p>Build logical thinking skills</p>
-            <div className="path-progress">
-              <div className="progress-fill" style={{ width: "35%" }} />
-            </div>
-          </Link>
-
-          <div className="path-card locked">
-            <h3>🐍 Python Foundations</h3>
-            <p>From zero to real programs</p>
-            <span className="locked-text">Locked</span>
-          </div>
-        </div>
-        
-      </section>
-
     </div>
   );
 };
