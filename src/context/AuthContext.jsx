@@ -8,9 +8,16 @@ export const AuthProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : null;
   });
 
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+  const login = (email) => {
+    const mockUser = {
+      name: "Rohit",
+      email,
+      role: "Student",
+      avatar: `https://ui-avatars.com/api/?name=Rohit`,
+    };
+
+    setUser(mockUser);
+    localStorage.setItem("user", JSON.stringify(mockUser));
   };
 
   const logout = () => {

@@ -1,16 +1,16 @@
-import { useState, useRef, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import "./Navbar.css";
 
 const Navbar = () => {
-  const [open, setOpen] = useState(false);
-  const menuRef = useRef(null);
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const { user, logout } = useAuth();
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
 
-  /* CLOSE DROPDOWN ON OUTSIDE CLICK */
+  // ✅ close dropdown on outside click
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -22,53 +22,61 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="navbar">
-      <h2 className="logo">Groott</h2>
+    <header className="navbar">
+      {/* LEFT */}
+      <div className="nav-left">
+        <span className="logo" onClick={() => navigate("/dashboard")}>
+          Groott
+        </span>
 
-      <div className="nav-right">
-        {!user ? (
-          <NavLink className="nav-link" to="/login">
-            Login
+        <nav className="nav-links">
+          <NavLink to="/dashboard" className="nav-item">
+            Home
           </NavLink>
-        ) : (
-          <div className="profile-menu" ref={menuRef}>
-            <img
-              src={user.avatar}
-              className="avatar"
-              alt="avatar"
-              onClick={() => setOpen(!open)}
-            />
-
-            {open && (
-              <div className="dropdown">
-                <div className="dropdown-user">
-                  <strong>{user.name}</strong>
-                  <span>{user.role}</span>
-                </div>
-
-                <NavLink to="/dashboard" onClick={() => setOpen(false)}>
-                  Dashboard
-                </NavLink>
-
-                <NavLink to="/courses" onClick={() => setOpen(false)}>
-                  Courses
-                </NavLink>
-
-                <button
-                  className="logout-btn"
-                  onClick={() => {
-                    logout();
-                    navigate("/login");
-                  }}
-                >
-                  Log out
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+          <NavLink to="/courses" className="nav-item">
+            Courses
+          </NavLink>
+        </nav>
       </div>
-    </nav>
+
+      {/* RIGHT */}
+      {user && (
+        <div className="nav-right" ref={menuRef}>
+          <div className="xp-pill">⚡ 420 XP</div>
+
+          <img
+            src={user.avatar}
+            alt="avatar"
+            className="avatar"
+            onClick={() => setOpen((prev) => !prev)}
+          />
+
+          <div className={`dropdown ${open ? "show" : ""}`}>
+            <div className="dropdown-user">
+              <strong>{user.name}</strong>
+              <span>{user.role}</span>
+            </div>
+
+            <NavLink to="/dashboard" onClick={() => setOpen(false)}>
+              Dashboard
+            </NavLink>
+            <NavLink to="/courses" onClick={() => setOpen(false)}>
+              Courses
+            </NavLink>
+
+            <button
+              className="logout-btn"
+              onClick={() => {
+                logout();
+                navigate("/login");
+              }}
+            >
+              Log out
+            </button>
+          </div>
+        </div>
+      )}
+    </header>
   );
 };
 

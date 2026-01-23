@@ -1,59 +1,39 @@
-import { useState } from "react";
-import "./login.css";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import "./auth.css";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ email, password });
-    // 🔐 authService.login(email, password) later
+    login("test@example.com");
+    navigate("/dashboard");
   };
 
   return (
-    <div className="login-page">
-      <div className="login-card">
-        {/* HEADER */}
-        <h1 className="login-title">Welcome back 👋</h1>
-        <p className="login-subtitle">
-          Log in to continue learning
-        </p>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1>Welcome back 👋</h1>
 
-        {/* FORM */}
-        <form className="login-form" onSubmit={handleSubmit}>
-          <div className="input-group">
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <div className="form-group">
             <label>Email</label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <input type="email" required />
           </div>
 
-          <div className="input-group">
+          <div className="form-group">
             <label>Password</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <input type="password" required />
           </div>
 
-          <button className="login-btn" type="submit">
-            Log In
-          </button>
+          <button className="auth-btn">Log in</button>
         </form>
 
-        {/* FOOTER */}
-        <div className="login-footer">
-          <span>New here?</span>
-          <a href="/signup">Create an account</a>
-        </div>
+        <p className="auth-footer">
+          Don’t have an account? <Link to="/signup">Sign up</Link>
+        </p>
       </div>
     </div>
   );

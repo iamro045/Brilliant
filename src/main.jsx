@@ -10,17 +10,20 @@ import "./index.css";
 import "./assets/styles/global.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
-    <AuthProvider>
-      <XPProvider>
-        <ProgressProvider>
-          <StreakProvider>
-            <AuthProvider>
-              <App />
-            </AuthProvider>
-          </StreakProvider>
-        </ProgressProvider>
-      </XPProvider>
-    </AuthProvider>
-  </BrowserRouter>,
+  <React.StrictMode>
+    <BrowserRouter>
+      <AuthProvider>
+        <XPProvider>
+          <ProgressProvider>
+            <StreakProvider>
+              <AuthProvider>
+                <App />
+              </AuthProvider>
+            </StreakProvider>
+          </ProgressProvider>
+        </XPProvider>
+      </AuthProvider>
+    </BrowserRouter>
+    ,
+  </React.StrictMode>,
 );

@@ -3,6 +3,9 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "./layout/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+
+import Dashboard from "./pages/Dashboard";
 import Courses from "./pages/Courses";
 import Course from "./pages/Course";
 import LessonPlay from "./pages/LessonPlay";
@@ -23,6 +26,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/dashboard" element={<Dashboard />} />
 
         {/* Single course (units + levels) */}
         <Route
@@ -45,7 +50,17 @@ function App() {
         />
       </Route>
 
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
       <Route path="/login" element={<Login />} />
+      <Route path="/Signup" element={<Signup />} />
     </Routes>
   );
 }

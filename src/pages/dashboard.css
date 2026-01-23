@@ -1,0 +1,172 @@
+/* ================= PAGE ================= */
+.dashboard-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem;
+  background: #fafafa;
+}
+
+/* ================= HEADER ================= */
+.dashboard-header h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.dashboard-header .subtitle {
+  color: #6b7280;
+  margin-bottom: 2.5rem;
+}
+
+/* ================= CONTINUE CARD ================= */
+.continue-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2.5rem;
+}
+
+.continue-info h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.unit-text {
+  color: #6b7280;
+  margin: 0.4rem 0 1rem;
+}
+
+/* Progress bar */
+.progress-bar {
+  width: 260px;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.progress-bar.small {
+  width: 100%;
+  margin-top: 0.8rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  transition: width 0.4s ease;
+}
+
+/* Continue button */
+.continue-btn {
+  background: #0f172a;
+  color: white;
+  padding: 0.9rem 1.6rem;
+  border-radius: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.continue-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.3);
+}
+
+/* ================= STATS ================= */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 18px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+}
+
+.stat-icon {
+  font-size: 1.8rem;
+}
+
+.stat-card strong {
+  font-size: 1.4rem;
+  display: block;
+}
+
+.stat-card p {
+  margin: 0;
+  color: #6b7280;
+}
+
+/* ================= LEARNING PATHS ================= */
+.learning-paths h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.paths-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.path-card {
+  background: white;
+  border-radius: 18px;
+  padding: 1.8rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+}
+
+.path-card h3 {
+  margin-bottom: 0.3rem;
+}
+
+.path-card p {
+  color: #6b7280;
+}
+
+.path-card.locked {
+  opacity: 0.6;
+}
+
+.locked-text {
+  display: inline-block;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #9ca3af;
+}
+
+
+/* Card entrance */
+.dashboard-page > * {
+  animation: fadeUp 0.6s ease both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover polish */
+.continue-card:hover,
+.stat-card:hover,
+.path-card:hover {
+  transform: translateY(-4px);
+  transition: transform 0.2s ease;
+}
