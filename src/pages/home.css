@@ -1,5 +1,4 @@
 .home {
-  padding: 4rem 2rem 6rem;
   text-align: center;
 }
 
@@ -47,7 +46,6 @@
 
 /* FEATURES */
 .features {
-  margin-top: 1rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 2rem;
@@ -260,4 +258,142 @@
 .hero-content {
   max-width: 640px;
   z-index: 2;
+}
+
+
+/* ================= HERO ================= */
+
+.hero {
+  position: relative;
+  padding: 140px 8% 120px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+  overflow: hidden;
+
+  /* Soft gradient background */
+  background:
+    radial-gradient(
+      600px circle at 50% 40%,
+      rgba(99, 102, 241, 0.18),
+      transparent 60%
+    ),
+    linear-gradient(
+      to bottom,
+      #f9fafb,
+      #ffffff
+    );
+}
+
+/* Glow layer */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      500px circle at 60% 35%,
+      rgba(99, 102, 241, 0.25),
+      transparent 65%
+    );
+  z-index: 0;
+}
+
+.hero-content,
+.hero-illustration {
+  position: relative;
+  z-index: 1;
+}
+
+/* ================= TEXT ================= */
+
+.hero-title {
+  font-size: clamp(2.8rem, 5vw, 4rem);
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.accent {
+  color: #6366f1;
+  position: relative;
+}
+
+/* Cursor */
+.cursor {
+  display: inline-block;
+  margin-left: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.cursor.visible {
+  opacity: 1;
+}
+
+.hero-subtitle {
+  margin-top: 20px;
+  max-width: 520px;
+  font-size: 1.05rem;
+  color: #475569;
+}
+
+/* ================= BUTTONS ================= */
+
+.hero-actions {
+  margin-top: 36px;
+  display: flex;
+  gap: 16px;
+}
+
+.primary-btn,
+.secondary-btn {
+  padding: 14px 22px;
+  border-radius: 14px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.primary-btn {
+  background: #6366f1;
+  color: white;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(99, 102, 241, 0.35);
+}
+
+.secondary-btn {
+  border: 2px solid #6366f1;
+  color: #6366f1;
+}
+
+.secondary-btn:hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+/* ================= ILLUSTRATION ================= */
+
+.hero-illustration img {
+  width: 420px;
+  max-width: 100%;
+}
+
+/* Float animation */
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
