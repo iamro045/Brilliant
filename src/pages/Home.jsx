@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./home.css";
 
 const WORD = "Think";
@@ -7,30 +7,47 @@ const WORD = "Think";
 const Home = () => {
   const [text, setText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
+  const featureRefs = useRef([]);
 
-  // Typing animation
+  /* ===== Typing ===== */
   useEffect(() => {
     let index = 0;
-
-    const typingInterval = setInterval(() => {
+    const typing = setInterval(() => {
       setText(WORD.slice(0, index + 1));
       index++;
-
-      if (index === WORD.length) {
-        clearInterval(typingInterval);
-      }
+      if (index === WORD.length) clearInterval(typing);
     }, 120);
-
-    return () => clearInterval(typingInterval);
+    return () => clearInterval(typing);
   }, []);
 
-  // Cursor blink (sync-friendly)
+  /* ===== Cursor blink ===== */
   useEffect(() => {
-    const cursorInterval = setInterval(() => {
-      setShowCursor((prev) => !prev);
-    }, 500);
+    const blink = setInterval(
+      () => setShowCursor((prev) => !prev),
+      500
+    );
+    return () => clearInterval(blink);
+  }, []);
 
-    return () => clearInterval(cursorInterval);
+  /* ===== Feature fade-in on scroll ===== */
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    featureRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -42,9 +59,7 @@ const Home = () => {
             Learn to{" "}
             <span className="accent">
               {text}
-              <span className={`cursor ${showCursor ? "visible" : ""}`}>
-                |
-              </span>
+              <span className={`cursor ${showCursor ? "visible" : ""}`}>|</span>
             </span>
             , not just code.
           </h1>
@@ -66,7 +81,7 @@ const Home = () => {
 
         <div className="hero-illustration float">
           <img
-            src="../src/assets/hero-illustration.svg"
+            src="/assets/hero-illustration.svg"
             alt="Learning illustration"
           />
         </div>
@@ -74,20 +89,34 @@ const Home = () => {
 
       {/* ================= FEATURES ================= */}
       <section className="features">
-        <div className="feature-card">
-          🧠 <h3>Think Like a Computer</h3>
-          <p>Build logic before syntax.</p>
-        </div>
-
-        <div className="feature-card">
-          🎮 <h3>Game-style Learning</h3>
-          <p>XP, streaks, levels & challenges.</p>
-        </div>
-
-        <div className="feature-card">
-          🚀 <h3>From Zero to Real Skills</h3>
-          <p>No boring theory dumps.</p>
-        </div>
+        {[
+          {
+            icon: "🧠",
+            title: "Think Like a Computer",
+            desc: "Build logic before syntax.",
+          },
+          {
+            icon: "🎮",
+            title: "Game-style Learning",
+            desc: "XP, streaks, levels & challenges.",
+          },
+          {
+            icon: "🚀",
+            title: "From Zero to Real Skills",
+            desc: "No boring theory dumps.",
+          },
+        ].map((f, i) => (
+          <div
+            key={f.title}
+            ref={(el) => (featureRefs.current[i] = el)}
+            className="feature-card fade-card"
+            style={{ transitionDelay: `${i * 120}ms` }}
+          >
+            {f.icon}
+            <h3>{f.title}</h3>
+            <p>{f.desc}</p>
+          </div>
+        ))}
       </section>
     </div>
   );
