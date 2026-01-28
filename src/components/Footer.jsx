@@ -11,6 +11,7 @@ const Footer = () => {
         </div>
 
         {/* Center */}
+        
         <div className="footer-links">
           <a href="/dashboard">Home</a>
           <a href="/courses">Courses</a>
