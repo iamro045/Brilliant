@@ -7,11 +7,11 @@ const Footer = () => {
         {/* Left */}
         <div className="footer-brand">
           <strong>Groott</strong>
-          <span>Learn. Think. Grow.</span>
+          <span>Learn Think 💡 Grow.</span>
         </div>
 
         {/* Center */}
-        
+
         <div className="footer-links">
           <a href="/dashboard">Home</a>
           <a href="/courses">Courses</a>
