@@ -36,7 +36,6 @@ const Navbar = () => {
 
   return (
     <header className="navbar">
-      {/* LEFT */}
       <div className="nav-left">
         <span className="logo" onClick={() => navigate("/dashboard")}>
           Groott
@@ -55,7 +54,7 @@ const Navbar = () => {
       {/* RIGHT */}
       {user && (
         <div className="nav-right" ref={menuRef}>
-          <div className="xp-pill">⚡ 420 XP</div>
+          <div className="xp-pill">⚡ 000 XP</div>
 
           <img
             src={user.avatar}
