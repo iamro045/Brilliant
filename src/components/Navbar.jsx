@@ -10,8 +10,7 @@ const Navbar = () => {
 
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
-
-  // ✅ close dropdown on outside click
+  
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
