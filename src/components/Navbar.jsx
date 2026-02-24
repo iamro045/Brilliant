@@ -38,7 +38,7 @@ const Navbar = () => {
     <header className="navbar">
       <div className="nav-left">
         <span className="logo" onClick={() => navigate("/dashboard")}>
-          Groott
+          Groott 🌳
         </span>
 
         <nav className="nav-links">
