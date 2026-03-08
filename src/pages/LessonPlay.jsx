@@ -17,13 +17,9 @@ const LessonPlay = () => {
   const [answer, setAnswer] = useState("");
   const [result, setResult] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [showBossCelebration, setShowBossCelebration] = useState(false);
-
-  // ✅ Find course
+  const [showBossCelebration, setShowBossCelebration] = useState(false)
   const course = courses.find(c => c.id === courseId);
   if (!course) return <p>Course not found</p>;
-
-  // ✅ Flatten lessons
   const allLessons = course.units.flatMap(unit => unit.lessons);
   const lesson = allLessons.find(l => l.id === lessonId);
   if (!lesson) return <p>Lesson not found</p>;
