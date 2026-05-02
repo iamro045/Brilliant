@@ -1,32 +1,148 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { courses } from "../data/courses";
-import { Star, Trophy, Zap, Check, Lock, Play } from "lucide-react";
+import { Star, Trophy, Zap, Check, Lock, Play, ArrowLeft, Flame } from "lucide-react";
 import { useProgress } from "../context/ProgressContext";
-import { useEffect, useRef } from "react";
+import { useXP } from "../context/XPContext";
+import { useStreak } from "../context/StreakContext";
+import { useEffect, useRef, useState } from "react";
 import "./courseMap.css";
+
+const LessonModal = ({ lesson, onClose, onComplete }) => {
+  const [answered, setAnswered] = useState(false);
+  const [selected, setSelected] = useState(null);
+
+  const options = ["Option A", "Option B", "Option C", "Option D"];
+  const correct = 2;
+
+  const handleSelect = (i) => {
+    if (answered) return;
+    setSelected(i);
+    setAnswered(true);
+    if (i === correct) setTimeout(() => { onComplete(); onClose(); }, 1200);
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-header">
+          <span className="modal-badge">Logic</span>
+          <button className="modal-close" onClick={onClose}>✕</button>
+        </div>
+        <h2 className="modal-title">{lesson.title}</h2>
+        <p className="modal-xp">+{lesson.xp} XP on completion</p>
+
+        <div className="modal-question">
+          <p>This is a sample question for <strong>{lesson.title}</strong>. Which answer is correct?</p>
+        </div>
+
+        <div className="modal-options">
+          {options.map((opt, i) => (
+            <button
+              key={i}
+              className={`modal-opt ${selected === i ? (i === correct ? "right" : "wrong") : ""} ${answered && i === correct ? "right" : ""}`}
+              onClick={() => handleSelect(i)}
+            >
+              <span className="opt-letter">{String.fromCharCode(65 + i)}</span>
+              {opt}
+              {answered && i === correct && <Check size={15} className="opt-check" />}
+            </button>
+          ))}
+        </div>
+
+        {answered && selected !== correct && (
+          <div className="modal-feedback wrong-feedback">
+            <strong>Not quite!</strong> The correct answer is {String.fromCharCode(65 + correct)}.
+            <button className="retry-btn" onClick={() => { setAnswered(false); setSelected(null); }}>Try again</button>
+          </div>
+        )}
+        {answered && selected === correct && (
+          <div className="modal-feedback right-feedback">
+            <strong>🎉 Correct!</strong> Great job! Moving on…
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const Course = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-
-  const { completedLessons, getCourseProgress } = useProgress();
-
-  const course = courses.find((c) => c.id === courseId) || courses[0];
-
+  const { completedLessons, completeLesson, getCourseProgress } = useProgress();
+  const { xp, addXp } = useXP();
+  const { streak } = useStreak();
+  const [activeLesson, setActiveLesson] = useState(null);
   const activeNodeRef = useRef(null);
+
+  const course = courses.find(c => c.id === courseId) || courses[0];
 
   useEffect(() => {
     if (activeNodeRef.current) {
-      activeNodeRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
+      activeNodeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, []);
 
+  const handleComplete = (lesson) => {
+    completeLesson(lesson.id);
+    addXp(lesson.xp);
+  };
+
+  const allLessons = course.units.flatMap(u => u.lessons);
+  const totalProgress = getCourseProgress(allLessons);
+
   return (
     <div className="course-layout">
-      {/* ================= MAP ================= */}
+      {/* SIDEBAR */}
+      <aside className="course-sidebar">
+        <button className="sb-back" onClick={() => navigate("/courses")}>
+          <ArrowLeft size={16} /> Back
+        </button>
+
+        <div className="sb-course-info">
+          <div className="sb-emoji">🧠</div>
+          <h2>{course.title}</h2>
+          <p>{course.description}</p>
+        </div>
+
+        <div className="sb-progress-card">
+          <div className="sbp-header">
+            <span>Overall progress</span>
+            <span className="sbp-pct">{totalProgress.percent}%</span>
+          </div>
+          <div className="sbp-bar">
+            <div className="sbp-fill" style={{ width: `${totalProgress.percent}%` }} />
+          </div>
+          <div className="sbp-meta">{totalProgress.completedCount}/{totalProgress.total} lessons</div>
+        </div>
+
+        <div className="sb-stats">
+          <div className="sb-stat">
+            <Flame size={18} className="sb-icon fire" />
+            <div>
+              <div className="sb-stat-val">{streak}</div>
+              <div className="sb-stat-lbl">Streak</div>
+            </div>
+          </div>
+          <div className="sb-stat">
+            <Zap size={18} className="sb-icon zap" />
+            <div>
+              <div className="sb-stat-val">{xp}</div>
+              <div className="sb-stat-lbl">Total XP</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="sb-leaderboard">
+          <h3><Trophy size={15} /> Leaderboard</h3>
+          <div className="sb-lb-entries">
+            <div className="sb-lb-entry you"><span className="sb-lb-rank">🥇</span><span>You</span><span className="sb-lb-xp">⚡ {xp}</span></div>
+            <div className="sb-lb-entry"><span className="sb-lb-rank">🥈</span><span>Priya S.</span><span className="sb-lb-xp">⚡ 380</span></div>
+            <div className="sb-lb-entry"><span className="sb-lb-rank">🥉</span><span>Marcus T.</span><span className="sb-lb-xp">⚡ 290</span></div>
+          </div>
+        </div>
+      </aside>
+
+      {/* MAP */}
       <main className="course-map">
         <div className="course-map-header">
           <h1>{course.title}</h1>
@@ -35,170 +151,94 @@ const Course = () => {
 
         {course.units.map((unit, unitIndex) => {
           const unitProgress = getCourseProgress(unit.lessons);
-
-          const isBossUnlocked = unit.lessons.every((l) =>
-            completedLessons.includes(l.id)
-          );
+          const isBossUnlocked = unit.lessons.every(l => completedLessons.includes(l.id));
 
           return (
             <section key={unit.unitId} className="course-unit">
-              {/* UNIT HEADER */}
-              <div className="course-unit-header">
-                <span className="course-unit-badge">
-                  UNIT {unitIndex + 1}
-                </span>
-                <h2>{unit.title}</h2>
+              <div className="unit-header">
+                <div className="unit-badge">UNIT {unitIndex + 1}</div>
+                <h2 className="unit-title">{unit.title}</h2>
+                <div className="unit-progress-bar">
+                  <div className="unit-progress-fill" style={{ width: `${unitProgress.percent}%` }} />
+                </div>
+                <span className="unit-pct">{unitProgress.percent}%</span>
               </div>
 
-              {/* MAP */}
-              <div className="course-path">
-                <svg
-                  className="course-path-svg"
-                  viewBox="0 0 200 800"
-                  preserveAspectRatio="none"
-                >
-                  <path
-                    d="M100 0 C 40 120, 160 240, 100 360 C 40 480, 160 600, 100 800"
-                    className="course-path-line"
-                  />
-                </svg>
-
+              <div className="node-path">
                 {unit.lessons.map((lesson, index) => {
                   const prev = unit.lessons[index - 1];
-
                   const isCompleted = completedLessons.includes(lesson.id);
-                  const isUnlocked =
-                    index === 0 ||
-                    completedLessons.includes(prev?.id);
-
-                  const status = isCompleted
-                    ? "completed"
-                    : isUnlocked
-                    ? "active"
-                    : "locked";
+                  const isUnlocked = index === 0 || completedLessons.includes(prev?.id);
+                  const status = isCompleted ? "completed" : isUnlocked ? "active" : "locked";
+                  const isLeft = index % 2 === 0;
 
                   return (
-                    <div
-                      key={lesson.id}
-                      className={`course-node-wrapper ${
-                        index % 2 === 0 ? "left" : "right"
-                      }`}
-                    >
-                      <div className="course-node-label">
-                        {lesson.title}
-                      </div>
+                    <div key={lesson.id} className={`node-row ${isLeft ? "left" : "right"}`}>
+                      {/* CONNECTOR */}
+                      {index > 0 && (
+                        <div className={`connector ${isLeft ? "from-right" : "from-left"} ${completedLessons.includes(prev?.id) ? "done" : ""}`} />
+                      )}
 
-                      <button
-                        ref={(el) => {
-                          if (
-                            status === "active" &&
-                            !activeNodeRef.current
-                          ) {
-                            activeNodeRef.current = el;
-                          }
-                        }}
-                        className={`course-node ${status}`}
-                        onClick={() =>
-                          status !== "locked" &&
-                          navigate(
-                            `/lesson/${courseId}/${lesson.id}`
-                          )
-                        }
-                      >
-                        {status === "completed" ? (
-                          <Check size={36} />
-                        ) : status === "active" ? (
-                          <Play size={36} fill="#fff" />
-                        ) : (
-                          <Lock size={30} />
-                        )}
-
-                        <div className="course-stars">
-                          {[1, 2, 3].map((s) => (
-                            <Star
-                              key={s}
-                              size={14}
-                              fill={
-                                status === "completed"
-                                  ? "#FFD700"
-                                  : "#ddd"
-                              }
-                              stroke="none"
-                            />
-                          ))}
+                      <div className="node-outer">
+                        {/* LABEL */}
+                        <div className={`node-label ${isLeft ? "label-right" : "label-left"}`}>
+                          {lesson.title}
+                          {lesson.xp && <span className="node-xp">+{lesson.xp} XP</span>}
                         </div>
-                      </button>
+
+                        {/* BUTTON */}
+                        <button
+                          ref={el => { if (status === "active" && !activeNodeRef.current) activeNodeRef.current = el; }}
+                          className={`map-node ${status} ${lesson.type === "boss" ? "boss" : ""}`}
+                          onClick={() => status !== "locked" && setActiveLesson(lesson)}
+                          disabled={status === "locked"}
+                          title={status === "locked" ? "Complete previous lessons first" : lesson.title}
+                        >
+                          {status === "completed" ? <Check size={28} strokeWidth={3} /> :
+                           status === "active" ? <Play size={28} fill="white" stroke="none" /> :
+                           <Lock size={22} />}
+
+                          <div className="node-stars">
+                            {[1,2,3].map(s => (
+                              <Star key={s} size={11} fill={status === "completed" ? "#ffd166" : "#e2e8f0"} stroke="none" />
+                            ))}
+                          </div>
+                        </button>
+                      </div>
                     </div>
                   );
                 })}
 
-                {/* BOSS */}
-                <div className="course-node-wrapper center">
-                  <button
-                    className={`course-node boss ${
-                      !isBossUnlocked ? "locked" : ""
-                    }`}
-                    disabled={!isBossUnlocked}
-                  >
-                    <Trophy size={44} />
-                  </button>
-                  <div className="course-node-label boss">
-                    {isBossUnlocked
-                      ? "Boss Challenge"
-                      : "Complete all lessons"}
+                {/* BOSS NODE */}
+                <div className="node-row center">
+                  <div className={`connector from-center ${isBossUnlocked ? "done" : ""}`} />
+                  <div className="node-outer">
+                    <button
+                      className={`map-node boss-node ${!isBossUnlocked ? "locked" : "active-boss"}`}
+                      disabled={!isBossUnlocked}
+                      title={isBossUnlocked ? "Boss Challenge!" : "Complete all lessons first"}
+                    >
+                      <Trophy size={34} />
+                    </button>
+                    <div className="boss-label">
+                      {isBossUnlocked ? "⚡ Boss Challenge" : "Complete all lessons"}
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              {/* UNIT PROGRESS */}
-              <div className="course-unit-progress">
-                <div className="course-progress-bar">
-                  <div
-                    className="course-progress-fill"
-                    style={{
-                      width: `${unitProgress.percent}%`,
-                    }}
-                  />
-                </div>
-                <p>{unitProgress.percent}% Complete</p>
               </div>
             </section>
           );
         })}
       </main>
 
-      {/* ================= SIDEBAR ================= */}
-      <aside className="course-sidebar">
-        <div className="sidebar-card">
-          <h3>📘 Current Course</h3>
-          <div className="course-progress-bar">
-            <div
-              className="course-progress-fill"
-              style={{
-                width: `${getCourseProgress(
-                  course.units.flatMap((u) => u.lessons)
-                ).percent}%`,
-              }}
-            />
-          </div>
-        </div>
-
-        <div className="sidebar-card">
-          <h3>
-            <Trophy size={18} /> Leaderboard
-          </h3>
-          <p>🥇 You — 450 XP</p>
-        </div>
-
-        <div className="sidebar-card highlight">
-          <h3>
-            <Zap size={18} /> Daily Streak
-          </h3>
-          <button className="primary-btn-3d">
-            DO EXERCISE
-          </button>
-        </div>
-      </aside>
+      {/* MODAL */}
+      {activeLesson && (
+        <LessonModal
+          lesson={activeLesson}
+          onClose={() => setActiveLesson(null)}
+          onComplete={() => handleComplete(activeLesson)}
+        />
+      )}
     </div>
   );
 };
