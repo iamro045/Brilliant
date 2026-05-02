@@ -55,7 +55,7 @@ export const courses = [
 
       {
         unitId: "u2",
-        title: "Decisions (Yes / No)",
+        title: "Decisions Yes / No",
         lessons: [
           {
             id: "u2-l1",
@@ -73,7 +73,7 @@ export const courses = [
             id: "u2-l3",
             title: "True or False",
             xp: 10,
-            type: "normal",
+            type: "medium",
           },
           {
             id: "u2-l4",

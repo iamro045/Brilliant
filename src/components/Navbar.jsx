@@ -10,8 +10,7 @@ const Navbar = () => {
 
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
-
-  // ✅ close dropdown on outside click
+  
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -37,10 +36,9 @@ const Navbar = () => {
 
   return (
     <header className="navbar">
-      {/* LEFT */}
       <div className="nav-left">
         <span className="logo" onClick={() => navigate("/dashboard")}>
-          Groott
+          Groott 🌳
         </span>
 
         <nav className="nav-links">
@@ -56,7 +54,7 @@ const Navbar = () => {
       {/* RIGHT */}
       {user && (
         <div className="nav-right" ref={menuRef}>
-          <div className="xp-pill">⚡ 420 XP</div>
+          <div className="xp-pill">⚡ 000 XP</div>
 
           <img
             src={user.avatar}
