@@ -1,13 +1,19 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const Layout = () => {
+  const { pathname } = useLocation();
+  const hideNav = pathname.startsWith("/lesson/");
+  const hideFooter = pathname.startsWith("/courses/") || pathname.startsWith("/lesson/");
+
   return (
     <>
-      <Navbar />
-      <main className="page">
+      {!hideNav && <Navbar />}
+      <main className={hideNav ? "" : "page"}>
         <Outlet />
       </main>
+      {!hideFooter && <Footer />}
     </>
   );
 };

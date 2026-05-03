@@ -1,0 +1,65 @@
+.courses-page { min-height: calc(100vh - var(--nav-height)); background: var(--surface-2); padding: 40px 24px; }
+.courses-inner { max-width: 1100px; margin: 0 auto; }
+.courses-header { margin-bottom: 36px; animation: fadeUp 0.4s ease; }
+.courses-header h1 { font-size: 2rem; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+.courses-header p { color: var(--text-2); font-size: 1rem; }
+
+.courses-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px; animation: fadeUp 0.4s ease 0.1s both;
+}
+
+.course-card {
+  background: white; border: 1px solid var(--border); border-radius: 18px;
+  overflow: hidden; display: flex; flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+  color: inherit;
+}
+.course-card:not(.locked-card):hover {
+  transform: translateY(-4px); box-shadow: var(--shadow-lg);
+}
+
+.cc-top {
+  padding: 28px 24px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  min-height: 100px;
+}
+.locked-top { background: var(--surface-3); }
+.cc-emoji { font-size: 2.4rem; }
+.cc-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.cc-tag {
+  padding: 3px 10px; border-radius: 99px;
+  font-size: 0.72rem; font-weight: 700;
+}
+
+.cc-body { padding: 20px 24px 24px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.cc-body h3 { font-size: 1rem; font-weight: 700; color: var(--text); }
+.cc-body p { font-size: 0.85rem; color: var(--text-2); line-height: 1.6; }
+
+.cc-meta {
+  display: flex; gap: 14px; flex-wrap: wrap;
+}
+.cc-meta span {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 0.78rem; color: var(--text-3); font-weight: 500;
+}
+
+.cc-progress { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+.cc-bar { flex: 1; height: 6px; background: var(--surface-3); border-radius: 99px; overflow: hidden; }
+.cc-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width 0.4s; }
+.cc-progress span { font-size: 0.78rem; font-weight: 700; color: var(--text-3); flex-shrink: 0; }
+
+.cc-cta {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 0.85rem; font-weight: 700; color: var(--text);
+  margin-top: auto; padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.locked-card { opacity: 0.65; cursor: default; }
+.cc-coming-badge {
+  display: inline-flex; align-items: center;
+  background: var(--surface-3); color: var(--text-3);
+  padding: 4px 12px; border-radius: 99px;
+  font-size: 0.75rem; font-weight: 600; margin-top: 4px;
+}

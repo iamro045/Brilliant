@@ -1,38 +1,20 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
-const XPContext = createContext(null);
+const XPContext = createContext();
 
 export const XPProvider = ({ children }) => {
-  const [xp, setXp] = useState(0);
+  const [xp, setXp] = useState(() => {
+    return parseInt(localStorage.getItem("brilliant_xp") || "0");
+  });
 
   useEffect(() => {
-    const savedXp = localStorage.getItem("xp");
-    if (savedXp) {
-      setXp(Number(savedXp));
-    }
-  }, []);
+    localStorage.setItem("brilliant_xp", String(xp));
+  }, [xp]);
 
-  const addXp = (amount) => {
-    setXp((prev) => {
-      const next = prev + amount;
-      localStorage.setItem("xp", next);
-      return next;
-    });
-  };
-
-  // 🧠 LEVEL CALCULATION
-  const level = Math.floor(xp / 100) + 1;
-  const currentLevelXp = xp % 100;
+  const addXp = (amount) => setXp(prev => prev + amount);
 
   return (
-    <XPContext.Provider
-      value={{
-        xp,
-        level,
-        currentLevelXp,
-        addXp,
-      }}
-    >
+    <XPContext.Provider value={{ xp, addXp }}>
       {children}
     </XPContext.Provider>
   );
