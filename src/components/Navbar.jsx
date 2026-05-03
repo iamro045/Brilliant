@@ -3,18 +3,24 @@ import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useXP } from "../context/XPContext";
 import { useStreak } from "../context/StreakContext";
-import { Zap, Flame, ChevronDown, LogOut, LayoutDashboard, BookOpen, User } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
+import {
+  Zap, Flame, ChevronDown, LogOut,
+  LayoutDashboard, BookOpen, Sun, Moon
+} from "lucide-react";
 import "./Navbar.css";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { xp } = useXP();
   const { streak } = useStreak();
+  const { dark, toggle } = useTheme();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const menuRef = useRef(null);
 
+  /* close dropdown on outside click */
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) setOpen(false);
@@ -23,46 +29,59 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  /* shadow on scroll */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const initials = user?.name ? user.name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() : "?";
+  const initials = user?.name
+    ? user.name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()
+    : "?";
 
   return (
     <header className={`navbar ${scrolled ? "scrolled" : ""}`}>
       <div className="nav-inner">
-        {/* LOGO */}
+
+        {/* ── LEFT ── */}
         <div className="nav-left">
           <Link to={user ? "/dashboard" : "/"} className="logo">
             <span className="logo-icon">◆</span>
             <span className="logo-text">Brilliant</span>
           </Link>
 
-          {user && (
-            <nav className="nav-links">
-              <NavLink to="/dashboard" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}>
-                Home
-              </NavLink>
-              <NavLink to="/courses" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}>
-                Courses
-              </NavLink>
-            </nav>
-          )}
-
-          {!user && (
-            <nav className="nav-links">
-              <a href="#features" className="nav-item">Courses</a>
-              <a href="#how" className="nav-item">For Teams</a>
-              <a href="#pricing" className="nav-item">Pricing</a>
-            </nav>
-          )}
+          <nav className="nav-links">
+            {user ? (
+              <>
+                <NavLink to="/dashboard" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}>Home</NavLink>
+                <NavLink to="/courses"   className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}>Courses</NavLink>
+              </>
+            ) : (
+              <>
+                <a href="#features" className="nav-item">Courses</a>
+                <a href="#how"      className="nav-item">For Teams</a>
+                <a href="#pricing"  className="nav-item">Pricing</a>
+              </>
+            )}
+          </nav>
         </div>
 
-        {/* RIGHT */}
+        {/* ── RIGHT ── */}
         <div className="nav-right">
+
+          {/* Dark-mode toggle */}
+          <button
+            className="theme-toggle"
+            onClick={toggle}
+            title={dark ? "Switch to light mode" : "Switch to dark mode"}
+            aria-label="Toggle dark mode"
+          >
+            {dark
+              ? <Sun  size={17} className="theme-icon sun"  />
+              : <Moon size={17} className="theme-icon moon" />}
+          </button>
+
           {user ? (
             <>
               <div className="nav-pill streak-pill">
@@ -74,6 +93,7 @@ const Navbar = () => {
                 <span>{xp} XP</span>
               </div>
 
+              {/* Avatar dropdown */}
               <div className="avatar-menu" ref={menuRef}>
                 <button className="avatar-btn" onClick={() => setOpen(p => !p)}>
                   <div className="avatar-circle">{initials}</div>
@@ -97,7 +117,10 @@ const Navbar = () => {
                       <BookOpen size={15} /> Courses
                     </NavLink>
                     <div className="dropdown-divider" />
-                    <button className="dropdown-item logout" onClick={() => { logout(); navigate("/"); setOpen(false); }}>
+                    <button
+                      className="dropdown-item logout"
+                      onClick={() => { logout(); navigate("/"); setOpen(false); }}
+                    >
                       <LogOut size={15} /> Log out
                     </button>
                   </div>
@@ -106,7 +129,7 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/login" className="nav-btn-ghost">Log in</Link>
+              <Link to="/login"  className="nav-btn-ghost">Log in</Link>
               <Link to="/signup" className="nav-btn-primary">Get started</Link>
             </>
           )}

@@ -10,7 +10,7 @@
 .lp-topbar {
   position: sticky; top: 0; z-index: 100;
   height: 60px;
-  background: white;
+  background: var(--modal-bg);
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; gap: 16px;
   padding: 0 20px;
@@ -89,7 +89,7 @@
 .intro-body { width: 100%; text-align: left; display: flex; flex-direction: column; gap: 16px; }
 .intro-text {
   font-size: 1rem; color: var(--text-2); line-height: 1.75;
-  background: white; border: 1px solid var(--border); border-radius: 14px; padding: 20px;
+  background: var(--modal-bg); border: 1px solid var(--border); border-radius: 14px; padding: 20px;
 }
 .intro-concept {
   background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 14px; padding: 20px;
@@ -135,7 +135,7 @@
 .q-opt {
   display: flex; align-items: center; gap: 12px;
   padding: 14px 18px; border-radius: 12px;
-  border: 2px solid var(--border); background: white;
+  border: 2px solid var(--border); background: var(--modal-bg);
   font-size: 0.93rem; font-weight: 500; color: var(--text);
   cursor: pointer; text-align: left;
   transition: border-color 0.15s, background 0.15s, transform 0.1s;
@@ -199,7 +199,7 @@
 .order-item {
   display: flex; align-items: center; gap: 12px;
   padding: 14px 16px; border-radius: 10px;
-  border: 2px solid var(--border); background: white;
+  border: 2px solid var(--border); background: var(--modal-bg);
   cursor: grab; transition: all 0.15s;
   font-size: 0.9rem; font-weight: 500;
 }
@@ -265,7 +265,7 @@
 }
 .comp-stats {
   display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
-  background: white; border: 1px solid var(--border); border-radius: 16px; padding: 20px 32px;
+  background: var(--modal-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px 32px;
   box-shadow: var(--shadow-sm);
 }
 .comp-stat { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 80px; }
@@ -296,7 +296,7 @@
 /* ─── ERROR ───────────────────────────────────────────── */
 .lp-error {
   max-width: 480px; margin: 80px auto; text-align: center; padding: 40px;
-  background: white; border-radius: 20px; border: 1px solid var(--border);
+  background: var(--modal-bg); border-radius: 20px; border: 1px solid var(--border);
 }
 .lp-error h2 { font-size: 1.4rem; margin-bottom: 12px; }
 .lp-error p { color: var(--text-2); margin-bottom: 20px; }

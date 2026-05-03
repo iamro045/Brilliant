@@ -5,6 +5,7 @@
   box-sizing: border-box;
 }
 
+/* ===== LIGHT MODE TOKENS ===== */
 :root {
   --primary: #1a1a2e;
   --accent: #ff6b35;
@@ -14,20 +15,71 @@
   --green-dark: #049b74;
   --yellow: #ffd166;
   --red: #ef476f;
-  --surface: #ffffff;
+
+  /* Surfaces */
+  --surface:   #ffffff;
   --surface-2: #f8f9fa;
   --surface-3: #f0f2f5;
-  --border: #e8eaed;
-  --text: #1a1a2e;
+  --border:    #e8eaed;
+
+  /* Text */
+  --text:   #1a1a2e;
   --text-2: #5f6b7c;
   --text-3: #9aa3af;
+
+  /* Nav */
+  --nav-bg:     rgba(255,255,255,0.95);
+  --nav-border: transparent;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow:    0 4px 16px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06);
+
   --nav-height: 64px;
   --radius: 12px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
-  --shadow-lg: 0 16px 48px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06);
+
+  /* Specific component bg */
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --dropdown-bg: #ffffff;
+  --modal-bg: #ffffff;
+  --aside-bg: #ffffff;
+  --footer-bg: #0f172a;
 }
 
+/* ===== DARK MODE TOKENS ===== */
+html.dark {
+  --surface:   #0f1117;
+  --surface-2: #161b27;
+  --surface-3: #1e2535;
+  --border:    #2a3347;
+
+  --text:   #e8edf5;
+  --text-2: #8b96a8;
+  --text-3: #4e5a6e;
+
+  --nav-bg:     rgba(15,17,23,0.95);
+  --nav-border: #2a3347;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow:    0 4px 16px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.25);
+
+  --card-bg: #161b27;
+  --input-bg: #1e2535;
+  --dropdown-bg: #1e2535;
+  --modal-bg: #161b27;
+  --aside-bg: #161b27;
+  --footer-bg: #070a10;
+
+  /* Accent overrides for dark — slightly brighter */
+  --green: #00e5b0;
+  --green-dark: #00c49a;
+  --accent: #ff7a45;
+}
+
+/* ===== BASE ===== */
 html, body, #root {
   width: 100%;
   min-height: 100%;
@@ -39,6 +91,7 @@ body {
   background: var(--surface);
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
 a { text-decoration: none; color: inherit; }
@@ -51,29 +104,21 @@ img { display: block; max-width: 100%; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
 
-/* ===== UTILITIES ===== */
+/* ===== UTILITY ===== */
 .page { padding-top: var(--nav-height); min-height: 100vh; }
 
+/* ===== ANIMATIONS ===== */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes fadeIn {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 rgba(6, 214, 160, 0.5); }
-  70% { box-shadow: 0 0 0 14px rgba(6, 214, 160, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(6, 214, 160, 0); }
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes spin {
   to { transform: rotate(360deg); }
