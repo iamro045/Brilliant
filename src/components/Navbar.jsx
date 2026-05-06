@@ -59,9 +59,9 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <a href="#features" className="nav-item">Courses</a>
-                <a href="#how"      className="nav-item">For Teams</a>
-                <a href="#pricing"  className="nav-item">Pricing</a>
+                <Link to="/courses" className="nav-item">Courses</Link>
+                <Link to="/for-teams" className="nav-item">For Teams</Link>
+                <Link to="/pricing" className="nav-item">Pricing</Link>
               </>
             )}
           </nav>

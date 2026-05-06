@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Brilliant</title>
+  <script>
+    // GitHub Pages SPA redirect: convert 404 path into query param, then redirect to index
+    var l = window.location;
+    var base = '/Brilliant/';
+    var path = l.pathname.replace(base, '');
+    var search = l.search ? l.search.slice(1) : '';
+    var hash = l.hash ? l.hash.slice(1) : '';
+    var query = '?p=' + encodeURIComponent('/' + path) +
+      (search ? '&q=' + encodeURIComponent(search) : '') +
+      (hash ? '&h=' + encodeURIComponent(hash) : '');
+    l.replace(base + query);
+  </script>
+</head>
+<body></body>
+</html>

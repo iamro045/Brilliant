@@ -14,8 +14,7 @@ import "./assets/styles/global.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    {/* Add the basename prop here. It must match your repo name exactly. */}
-    <BrowserRouter basename="/Brilliant">
+    <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
           <XPProvider>
