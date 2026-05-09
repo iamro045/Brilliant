@@ -4,6 +4,7 @@ import { questionBank } from "../data/questions";
 import { courses } from "../data/courses";
 import { useProgress } from "../context/ProgressContext";
 import { useXP } from "../context/XPContext";
+import { useStreak } from "../context/StreakContext";
 import {
   Check, X, ArrowRight, ArrowLeft, Trophy, Zap,
   Star, BookOpen, ChevronRight, RotateCcw, Home
@@ -280,6 +281,7 @@ const LessonPage = () => {
   const navigate = useNavigate();
   const { completeLesson } = useProgress();
   const { addXp } = useXP();
+  const { markActivity } = useStreak();
 
   const found = findLesson(courseId, lessonId);
   const lessonData = questionBank[lessonId];
@@ -340,6 +342,7 @@ const LessonPage = () => {
       if (pct >= 65) {
         completeLesson(lessonId);
         addXp(lesson.xp || 10);
+        markActivity();
       }
       setPhase("complete");
     }

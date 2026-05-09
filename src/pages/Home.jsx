@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Star, Sparkles, Brain, Code2, Calculator, Atom, ChevronRight, Play, Check } from "lucide-react";
+import { ArrowRight, Star, Sparkles, Brain, Code2, Calculator, Atom, ChevronRight, Play, Check, Flame, Zap } from "lucide-react";
+import { useXP } from "../context/XPContext";
+import { useStreak } from "../context/StreakContext";
+import { useAuth } from "../context/AuthContext";
 import "./home.css";
 
 const ROTATING_WORDS = ["Think", "Reason", "Discover", "Solve", "Create"];
@@ -23,6 +26,9 @@ const Home = () => {
   const [displayed, setDisplayed] = useState("");
   const [typing, setTyping] = useState(true);
   const featureRefs = useRef([]);
+  const { xp } = useXP();
+  const { streak } = useStreak();
+  const { user } = useAuth();
 
   useEffect(() => {
     let timeout;
@@ -84,10 +90,18 @@ const Home = () => {
             </p>
 
             <div className="hero-actions">
-              <Link to="/signup" className="btn-primary">
-                Start for free <ArrowRight size={16} />
-              </Link>
-              <Link to="/login" className="btn-ghost">I have an account</Link>
+              {user ? (
+                <Link to="/dashboard" className="btn-primary">
+                  Go to Dashboard <ArrowRight size={16} />
+                </Link>
+              ) : (
+                <>
+                  <Link to="/signup" className="btn-primary">
+                    Start for free <ArrowRight size={16} />
+                  </Link>
+                  <Link to="/login" className="btn-ghost">I have an account</Link>
+                </>
+              )}
             </div>
 
             <div className="hero-social">
@@ -123,11 +137,11 @@ const Home = () => {
             </div>
 
             <div className="hero-stat-1 float-slow">
-              <Sparkles size={16} className="hs-icon" />
-              <span>Streak: <strong>5 days</strong></span>
+              <Flame size={16} className="hs-icon" />
+              <span>Streak: <strong>{streak} {streak === 1 ? "day" : "days"}</strong></span>
             </div>
             <div className="hero-stat-2 float-slow-2">
-              <span>⚡</span><span><strong>420 XP</strong> earned</span>
+              <Zap size={15} /><span><strong>{xp} XP</strong> · Rank #{Math.max(1, 10 - Math.floor(xp / 50))}</span>
             </div>
           </div>
         </div>
