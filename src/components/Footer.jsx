@@ -37,8 +37,9 @@ const Footer = () => {
             Master math, science & computer science through hands-on problem solving — 15 minutes a day.
           </p>
           <div className="footer-social">
-            <a href="https://github.com/iamro045" className="social-btn" aria-label="GitHub"><Github size={16} /></a>
-            <a href="https://www.linkedin.com/in/rohitshinde045/" className="social-btn" aria-label="LinkedIn"><Linkedin size={16} /></a>
+            <a href="#" className="social-btn" aria-label="GitHub"><Github size={16} /></a>
+            <a href="#" className="social-btn" aria-label="Twitter"><Twitter size={16} /></a>
+            <a href="#" className="social-btn" aria-label="LinkedIn"><Linkedin size={16} /></a>
           </div>
           <button className="footer-theme-toggle" onClick={toggle} aria-label="Toggle dark mode">
             {dark ? <><Sun size={15} /> Light mode</> : <><Moon size={15} /> Dark mode</>}

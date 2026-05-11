@@ -1,8 +1,7 @@
 import { NavLink, useNavigate, Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useXP } from "../context/XPContext";
-import { useStreak } from "../context/StreakContext";
+import { useGame } from "../context/GameContext";
 import { useTheme } from "../context/ThemeContext";
 import {
   Zap, Flame, ChevronDown, LogOut,
@@ -12,15 +11,13 @@ import "./Navbar.css";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
-  const { xp } = useXP();
-  const { streak } = useStreak();
+  const { xp, streak } = useGame();
   const { dark, toggle } = useTheme();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const menuRef = useRef(null);
 
-  /* close dropdown on outside click */
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) setOpen(false);
@@ -29,7 +26,6 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  /* shadow on scroll */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
@@ -43,14 +39,11 @@ const Navbar = () => {
   return (
     <header className={`navbar ${scrolled ? "scrolled" : ""}`}>
       <div className="nav-inner">
-
-        {/* ── LEFT ── */}
         <div className="nav-left">
           <Link to={user ? "/dashboard" : "/"} className="logo">
             <span className="logo-icon">◆</span>
             <span className="logo-text">Brilliant</span>
           </Link>
-
           <nav className="nav-links">
             {user ? (
               <>
@@ -59,27 +52,17 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link to="/courses" className="nav-item">Courses</Link>
+                <Link to="/courses"   className="nav-item">Courses</Link>
                 <Link to="/for-teams" className="nav-item">For Teams</Link>
-                <Link to="/pricing" className="nav-item">Pricing</Link>
+                <Link to="/pricing"   className="nav-item">Pricing</Link>
               </>
             )}
           </nav>
         </div>
 
-        {/* ── RIGHT ── */}
         <div className="nav-right">
-
-          {/* Dark-mode toggle */}
-          <button
-            className="theme-toggle"
-            onClick={toggle}
-            title={dark ? "Switch to light mode" : "Switch to dark mode"}
-            aria-label="Toggle dark mode"
-          >
-            {dark
-              ? <Sun  size={17} className="theme-icon sun"  />
-              : <Moon size={17} className="theme-icon moon" />}
+          <button className="theme-toggle" onClick={toggle} title={dark ? "Light mode" : "Dark mode"} aria-label="Toggle dark mode">
+            {dark ? <Sun size={17} className="theme-icon" /> : <Moon size={17} className="theme-icon" />}
           </button>
 
           {user ? (
@@ -93,13 +76,11 @@ const Navbar = () => {
                 <span>{xp} XP</span>
               </div>
 
-              {/* Avatar dropdown */}
               <div className="avatar-menu" ref={menuRef}>
                 <button className="avatar-btn" onClick={() => setOpen(p => !p)}>
                   <div className="avatar-circle">{initials}</div>
                   <ChevronDown size={14} className={`chevron ${open ? "open" : ""}`} />
                 </button>
-
                 {open && (
                   <div className="dropdown">
                     <div className="dropdown-header">
@@ -117,10 +98,7 @@ const Navbar = () => {
                       <BookOpen size={15} /> Courses
                     </NavLink>
                     <div className="dropdown-divider" />
-                    <button
-                      className="dropdown-item logout"
-                      onClick={() => { logout(); navigate("/"); setOpen(false); }}
-                    >
+                    <button className="dropdown-item logout" onClick={() => { logout(); navigate("/"); setOpen(false); }}>
                       <LogOut size={15} /> Log out
                     </button>
                   </div>

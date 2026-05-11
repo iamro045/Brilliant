@@ -1,6 +1,6 @@
 import { courses } from "../data/courses";
 import { Link } from "react-router-dom";
-import { useProgress } from "../context/ProgressContext";
+import { useGame } from "../context/GameContext";
 import { ChevronRight, BookOpen, Clock, Zap } from "lucide-react";
 import "./courses.css";
 
@@ -9,7 +9,7 @@ const COURSE_META = {
 };
 
 const Courses = () => {
-  const { getCourseProgress } = useProgress();
+  const { getCourseProgress } = useGame();
 
   return (
     <div className="courses-page">

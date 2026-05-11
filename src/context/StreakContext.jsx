@@ -3,60 +3,65 @@ import { createContext, useContext, useState, useEffect, useCallback } from "rea
 const StreakContext = createContext();
 
 const today = () => new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+const yesterday = () => {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return d.toISOString().slice(0, 10);
+};
 
 export const StreakProvider = ({ children }) => {
-  const [streak, setStreak] = useState(() => {
-    return parseInt(localStorage.getItem("brilliant_streak") || "0");
+  const [streak, setStreak]   = useState(() => parseInt(localStorage.getItem("brilliant_streak") || "0"));
+  const [lastDate, setLastDate] = useState(() => localStorage.getItem("brilliant_last_date") || "");
+  // activityLog: { "YYYY-MM-DD": true } for the last 7 days
+  const [activityLog, setActivityLog] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("brilliant_activity") || "{}"); }
+    catch { return {}; }
   });
 
-  const [lastActiveDate, setLastActiveDate] = useState(() => {
-    return localStorage.getItem("brilliant_last_active") || "";
-  });
+  // Call this whenever the user completes any lesson
+  const recordActivity = useCallback(() => {
+    const td = today();
+    setActivityLog(prev => {
+      const next = { ...prev, [td]: true };
+      localStorage.setItem("brilliant_activity", JSON.stringify(next));
+      return next;
+    });
 
-  // On mount: check if the stored streak is still valid (not broken by a missed day)
+    setLastDate(prev => {
+      if (prev === td) return prev;                  // already counted today
+      const newStreak = prev === yesterday()
+        ? (s => { localStorage.setItem("brilliant_streak", s + 1); return s + 1; })(streak)
+        : 1;                                         // streak reset or first day
+      setStreak(newStreak);
+      localStorage.setItem("brilliant_streak", String(newStreak));
+      localStorage.setItem("brilliant_last_date", td);
+      return td;
+    });
+  }, [streak]);
+
+  // Break streak if the user skipped yesterday and today hasn't been recorded yet
   useEffect(() => {
-    const todayStr = today();
-    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-
-    if (!lastActiveDate) {
-      // First ever visit — start streak at 1
-      setStreak(1);
-      setLastActiveDate(todayStr);
-      localStorage.setItem("brilliant_streak", "1");
-      localStorage.setItem("brilliant_last_active", todayStr);
-    } else if (lastActiveDate === todayStr) {
-      // Already counted today — nothing to do
-    } else if (lastActiveDate === yesterday) {
-      // Came back on consecutive day — extend streak
-      const newStreak = streak + 1;
-      setStreak(newStreak);
-      setLastActiveDate(todayStr);
-      localStorage.setItem("brilliant_streak", String(newStreak));
-      localStorage.setItem("brilliant_last_active", todayStr);
-    } else {
-      // Missed a day — reset streak
-      setStreak(1);
-      setLastActiveDate(todayStr);
-      localStorage.setItem("brilliant_streak", "1");
-      localStorage.setItem("brilliant_last_active", todayStr);
+    const td = today();
+    if (lastDate && lastDate !== td && lastDate !== yesterday()) {
+      // More than 1 day gap — reset streak
+      setStreak(0);
+      localStorage.setItem("brilliant_streak", "0");
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line
 
-  // Call this when user completes a lesson to ensure today is marked active
-  const markActivity = useCallback(() => {
-    const todayStr = today();
-    if (lastActiveDate !== todayStr) {
-      const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-      const newStreak = lastActiveDate === yesterday ? streak + 1 : 1;
-      setStreak(newStreak);
-      setLastActiveDate(todayStr);
-      localStorage.setItem("brilliant_streak", String(newStreak));
-      localStorage.setItem("brilliant_last_active", todayStr);
+  // Returns array of 7 booleans [Mon..Sun] for the current week
+  const getWeekActivity = () => {
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      days.push(!!activityLog[d.toISOString().slice(0, 10)]);
     }
-  }, [lastActiveDate, streak]);
+    return days;
+  };
 
   return (
-    <StreakContext.Provider value={{ streak, markActivity }}>
+    <StreakContext.Provider value={{ streak, recordActivity, getWeekActivity, activityLog }}>
       {children}
     </StreakContext.Provider>
   );

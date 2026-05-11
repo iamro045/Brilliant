@@ -2,18 +2,18 @@ import { useParams, useNavigate } from "react-router-dom";
 import { courses } from "../data/courses";
 import { questionBank } from "../data/questions";
 import { Star, Trophy, Zap, Check, Lock, Play, ArrowLeft, Flame, BookOpen } from "lucide-react";
-import { useProgress } from "../context/ProgressContext";
-import { useXP } from "../context/XPContext";
-import { useStreak } from "../context/StreakContext";
+import { useGame } from "../context/GameContext";
+
+
 import { useEffect, useRef } from "react";
 import "./courseMap.css";
 
 const Course = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const { completedLessons, getCourseProgress } = useProgress();
-  const { xp } = useXP();
-  const { streak } = useStreak();
+  const { completedLessons, getCourseProgress, xp, streak } = useGame();
+  
+  
   const activeNodeRef = useRef(null);
 
   const course = courses.find(c => c.id === courseId) || courses[0];

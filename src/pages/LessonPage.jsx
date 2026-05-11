@@ -2,17 +2,14 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { questionBank } from "../data/questions";
 import { courses } from "../data/courses";
-import { useProgress } from "../context/ProgressContext";
-import { useXP } from "../context/XPContext";
-import { useStreak } from "../context/StreakContext";
+import { useGame } from "../context/GameContext";
 import {
-  Check, X, ArrowRight, ArrowLeft, Trophy, Zap,
-  Star, BookOpen, ChevronRight, RotateCcw, Home
+  Check, X, ArrowRight, Trophy, Zap,
+  Star, RotateCcw, Home
 } from "lucide-react";
 import "./lesson.css";
 
 /* ─── Helpers ─────────────────────────────────────────── */
-
 const findLesson = (courseId, lessonId) => {
   const course = courses.find(c => c.id === courseId);
   if (!course) return null;
@@ -32,23 +29,17 @@ const findNextLesson = (courseId, lessonId) => {
 };
 
 /* ─── Sub-components ──────────────────────────────────── */
-
 const ProgressBar = ({ current, total }) => (
   <div className="lp-progress">
     <div className="lp-prog-track">
-      <div
-        className="lp-prog-fill"
-        style={{ width: `${(current / total) * 100}%` }}
-      />
+      <div className="lp-prog-fill" style={{ width: `${(current / total) * 100}%` }} />
     </div>
     <span className="lp-prog-label">{current}/{total}</span>
   </div>
 );
 
 const XPPopup = ({ xp }) => (
-  <div className="xp-popup">
-    <Zap size={16} /> +{xp} XP
-  </div>
+  <div className="xp-popup"><Zap size={16} /> +{xp} XP</div>
 );
 
 const IntroSlide = ({ data, onStart }) => (
@@ -83,11 +74,7 @@ const MCQSlide = ({ q, onAnswer, answered, selected }) => {
             else cls += " dimmed";
           }
           return (
-            <button
-              key={i}
-              className={cls}
-              onClick={() => !answered && onAnswer(i)}
-            >
+            <button key={i} className={cls} onClick={() => !answered && onAnswer(i)}>
               <span className="opt-letter">{String.fromCharCode(65 + i)}</span>
               <span className="opt-text">{opt}</span>
               {answered && i === q.correct && <Check size={16} className="opt-icon correct-icon" />}
@@ -98,9 +85,7 @@ const MCQSlide = ({ q, onAnswer, answered, selected }) => {
       </div>
       {answered && (
         <div className={`q-feedback ${isCorrect ? "feedback-correct" : "feedback-wrong"}`}>
-          <div className="fb-header">
-            {isCorrect ? "✅ Correct!" : "❌ Not quite"}
-          </div>
+          <div className="fb-header">{isCorrect ? "✅ Correct!" : "❌ Not quite"}</div>
           <p className="fb-explanation">{q.explanation}</p>
         </div>
       )}
@@ -123,11 +108,7 @@ const TrueFalseSlide = ({ q, onAnswer, answered, selected }) => {
             else if (i === selected) cls += " wrong";
           }
           return (
-            <button
-              key={i}
-              className={cls}
-              onClick={() => !answered && onAnswer(i)}
-            >
+            <button key={i} className={cls} onClick={() => !answered && onAnswer(i)}>
               <span className="tf-emoji">{i === 0 ? "✓" : "✗"}</span>
               {opt}
               {answered && i === correctIdx && <Check size={16} className="opt-icon correct-icon" />}
@@ -138,9 +119,7 @@ const TrueFalseSlide = ({ q, onAnswer, answered, selected }) => {
       </div>
       {answered && (
         <div className={`q-feedback ${selected === correctIdx ? "feedback-correct" : "feedback-wrong"}`}>
-          <div className="fb-header">
-            {selected === correctIdx ? "✅ Correct!" : "❌ Not quite"}
-          </div>
+          <div className="fb-header">{selected === correctIdx ? "✅ Correct!" : "❌ Not quite"}</div>
           <p className="fb-explanation">{q.explanation}</p>
         </div>
       )}
@@ -148,12 +127,10 @@ const TrueFalseSlide = ({ q, onAnswer, answered, selected }) => {
   );
 };
 
-const OrderSlide = ({ q, onAnswer, answered, selected }) => {
-  const [arrangement, setArrangement] = useState(() => [...q.items]);
+const OrderSlide = ({ q, onAnswer, answered }) => {
+  const [arrangement, setArrangement] = useState([...q.items]);
   const [dragging, setDragging] = useState(null);
-  const [submitted, setSubmitted] = useState(false);
 
-  const handleDragStart = (i) => setDragging(i);
   const handleDrop = (i) => {
     if (dragging === null || dragging === i) return;
     const arr = [...arrangement];
@@ -163,14 +140,12 @@ const OrderSlide = ({ q, onAnswer, answered, selected }) => {
   };
 
   const handleSubmit = () => {
-    setSubmitted(true);
-    // Check if arrangement matches correct order
-    const isCorrect = arrangement.every((item, i) => item === q.items[q.correct[i]]);
+    const correctOrder = q.correct.map(i => q.items[i]);
+    const isCorrect = arrangement.every((item, i) => item === correctOrder[i]);
     onAnswer(isCorrect ? 0 : 1, isCorrect);
   };
 
   const correctOrder = q.correct.map(i => q.items[i]);
-  const isCorrect = answered && arrangement.every((item, i) => item === correctOrder[i]);
 
   return (
     <div className="slide question-slide">
@@ -182,7 +157,7 @@ const OrderSlide = ({ q, onAnswer, answered, selected }) => {
             key={item}
             className={`order-item ${dragging === i ? "dragging" : ""} ${answered ? (item === correctOrder[i] ? "order-correct" : "order-wrong") : ""}`}
             draggable={!answered}
-            onDragStart={() => handleDragStart(i)}
+            onDragStart={() => setDragging(i)}
             onDragOver={e => e.preventDefault()}
             onDrop={() => handleDrop(i)}
           >
@@ -199,44 +174,30 @@ const OrderSlide = ({ q, onAnswer, answered, selected }) => {
         </button>
       )}
       {answered && (
-        <div className={`q-feedback ${isCorrect ? "feedback-correct" : "feedback-wrong"}`}>
-          <div className="fb-header">{isCorrect ? "✅ Perfect order!" : "❌ Not quite right"}</div>
+        <div className={`q-feedback ${arrangement.every((item, i) => item === correctOrder[i]) ? "feedback-correct" : "feedback-wrong"}`}>
+          <div className="fb-header">
+            {arrangement.every((item, i) => item === correctOrder[i]) ? "✅ Perfect order!" : "❌ Not quite right"}
+          </div>
           <p className="fb-explanation">{q.explanation}</p>
-          {!isCorrect && (
-            <div className="correct-order">
-              <strong>Correct order:</strong>
-              {correctOrder.map((item, i) => (
-                <div key={i} className="co-item">{i + 1}. {item}</div>
-              ))}
-            </div>
-          )}
         </div>
       )}
     </div>
   );
 };
 
-const CompletionSlide = ({ lessonData, lessonMeta, score, total, onNext, onRetry, onCourse }) => {
+const CompletionSlide = ({ lessonMeta, score, total, xpEarned, onNext, onRetry, onCourse }) => {
   const pct = Math.round((score / total) * 100);
   const stars = pct >= 90 ? 3 : pct >= 65 ? 2 : 1;
-
   return (
     <div className="slide completion-slide">
-      <div className="comp-trophy">
-        {pct === 100 ? "🏆" : pct >= 65 ? "🎉" : "💪"}
-      </div>
+      <div className="comp-trophy">{pct === 100 ? "🏆" : pct >= 65 ? "🎉" : "💪"}</div>
       <h1 className="comp-title">
         {pct === 100 ? "Perfect Score!" : pct >= 65 ? "Lesson Complete!" : "Keep Practicing!"}
       </h1>
       <div className="comp-stars">
-        {[1, 2, 3].map(s => (
-          <Star
-            key={s}
-            size={36}
-            fill={s <= stars ? "#ffd166" : "#e2e8f0"}
-            stroke="none"
-            className={s <= stars ? "star-earned" : ""}
-          />
+        {[1,2,3].map(s => (
+          <Star key={s} size={36} fill={s <= stars ? "#ffd166" : "#e2e8f0"} stroke="none"
+            className={s <= stars ? "star-earned" : ""} />
         ))}
       </div>
       <div className="comp-stats">
@@ -249,7 +210,7 @@ const CompletionSlide = ({ lessonData, lessonMeta, score, total, onNext, onRetry
           <div className="comp-stat-lbl">Accuracy</div>
         </div>
         <div className="comp-stat xp-stat">
-          <div className="comp-stat-val">+{lessonMeta?.xp || 10}</div>
+          <div className="comp-stat-val">+{xpEarned}</div>
           <div className="comp-stat-lbl">XP Earned</div>
         </div>
       </div>
@@ -260,11 +221,7 @@ const CompletionSlide = ({ lessonData, lessonMeta, score, total, onNext, onRetry
           </button>
         )}
         <button className="comp-btn primary" onClick={pct >= 65 ? onNext : onRetry}>
-          {pct >= 65 ? (
-            <><ArrowRight size={16} /> Next lesson</>
-          ) : (
-            <><RotateCcw size={16} /> Retry</>
-          )}
+          {pct >= 65 ? <><ArrowRight size={16} /> Next lesson</> : <><RotateCcw size={16} /> Retry</>}
         </button>
       </div>
       <button className="comp-back" onClick={onCourse}>
@@ -275,23 +232,21 @@ const CompletionSlide = ({ lessonData, lessonMeta, score, total, onNext, onRetry
 };
 
 /* ─── Main Page ───────────────────────────────────────── */
-
 const LessonPage = () => {
   const { courseId, lessonId } = useParams();
   const navigate = useNavigate();
-  const { completeLesson } = useProgress();
-  const { addXp } = useXP();
-  const { markActivity } = useStreak();
+  const { completeLesson } = useGame();
 
   const found = findLesson(courseId, lessonId);
   const lessonData = questionBank[lessonId];
 
-  const [phase, setPhase] = useState("intro"); // intro | questions | complete
+  const [phase, setPhase] = useState("intro");
   const [qIndex, setQIndex] = useState(0);
   const [answered, setAnswered] = useState(false);
   const [selected, setSelected] = useState(null);
   const [correctCount, setCorrectCount] = useState(0);
   const [showXP, setShowXP] = useState(false);
+  const [xpEarned, setXpEarned] = useState(0);
 
   useEffect(() => { window.scrollTo(0, 0); }, [qIndex]);
 
@@ -308,18 +263,18 @@ const LessonPage = () => {
   const { lesson, unit } = found;
   const questions = lessonData.questions;
   const currentQ = questions[qIndex];
+  const perQXP = Math.ceil((lesson.xp || 10) / questions.length);
+
+  const isAnswerCorrect = (selectedIdx, forceCorrect) => {
+    if (forceCorrect !== undefined) return forceCorrect;
+    if (currentQ.type === "truefalse") return selectedIdx === (currentQ.correct === true ? 0 : 1);
+    return selectedIdx === currentQ.correct;
+  };
 
   const handleAnswer = (selectedIdx, forceCorrect) => {
     setSelected(selectedIdx);
     setAnswered(true);
-    const isCorrect =
-      forceCorrect !== undefined
-        ? forceCorrect
-        : currentQ.type === "truefalse"
-        ? selectedIdx === (currentQ.correct === true ? 0 : 1)
-        : selectedIdx === currentQ.correct;
-
-    if (isCorrect) {
+    if (isAnswerCorrect(selectedIdx, forceCorrect)) {
       setCorrectCount(p => p + 1);
       setShowXP(true);
       setTimeout(() => setShowXP(false), 1500);
@@ -327,22 +282,21 @@ const LessonPage = () => {
   };
 
   const handleNext = () => {
+    const lastCorrect = isAnswerCorrect(selected);
+    const finalCorrect = correctCount + (answered && lastCorrect ? (qIndex === correctCount ? 0 : 0) : 0);
+
     if (qIndex < questions.length - 1) {
       setQIndex(q => q + 1);
       setAnswered(false);
       setSelected(null);
     } else {
-      // Complete
-      const pct = Math.round(((correctCount + (answered && (
-        currentQ.type === "truefalse"
-          ? selected === (currentQ.correct === true ? 0 : 1)
-          : selected === currentQ.correct
-      ) ? 1 : 0)) / questions.length) * 100);
-
+      // Calculate final score
+      const totalCorrect = correctCount + (answered && isAnswerCorrect(selected) ? 1 : 0);
+      const pct = Math.round((totalCorrect / questions.length) * 100);
+      const earned = pct >= 65 ? lesson.xp || 10 : 0;
+      setXpEarned(earned);
       if (pct >= 65) {
-        completeLesson(lessonId);
-        addXp(lesson.xp || 10);
-        markActivity();
+        completeLesson(lessonId, earned);
       }
       setPhase("complete");
     }
@@ -354,6 +308,7 @@ const LessonPage = () => {
     setAnswered(false);
     setSelected(null);
     setCorrectCount(0);
+    setXpEarned(0);
   };
 
   const handleNextLesson = () => {
@@ -362,18 +317,10 @@ const LessonPage = () => {
     else navigate(`/courses/${courseId}`);
   };
 
-  // Final score including last answer
-  const finalScore = correctCount + (
-    answered && phase !== "complete" ? (
-      currentQ.type === "truefalse"
-        ? (selected === (currentQ.correct === true ? 0 : 1) ? 1 : 0)
-        : (selected === currentQ.correct ? 1 : 0)
-    ) : 0
-  );
+  const finalScore = correctCount + (answered && phase !== "complete" && isAnswerCorrect(selected) ? 1 : 0);
 
   return (
     <div className="lesson-page">
-      {/* TOP BAR */}
       <div className="lp-topbar">
         <button className="lp-exit" onClick={() => navigate(`/courses/${courseId}`)}>
           <X size={18} />
@@ -384,9 +331,8 @@ const LessonPage = () => {
         <div className="lp-unit-badge">{unit.title}</div>
       </div>
 
-      {/* CONTENT */}
       <div className="lp-content">
-        {showXP && <XPPopup xp={Math.floor((lesson.xp || 10) / questions.length)} />}
+        {showXP && <XPPopup xp={perQXP} />}
 
         {phase === "intro" && (
           <IntroSlide data={lessonData} onStart={() => setPhase("questions")} />
@@ -394,44 +340,21 @@ const LessonPage = () => {
 
         {phase === "questions" && (
           <div className="lp-question-wrapper">
-            {/* Question counter */}
-            <div className="lp-q-counter">
-              Question {qIndex + 1} of {questions.length}
-            </div>
-
+            <div className="lp-q-counter">Question {qIndex + 1} of {questions.length}</div>
             {currentQ.type === "mcq" && (
-              <MCQSlide
-                q={currentQ}
-                onAnswer={handleAnswer}
-                answered={answered}
-                selected={selected}
-              />
+              <MCQSlide q={currentQ} onAnswer={handleAnswer} answered={answered} selected={selected} />
             )}
             {currentQ.type === "truefalse" && (
-              <TrueFalseSlide
-                q={currentQ}
-                onAnswer={handleAnswer}
-                answered={answered}
-                selected={selected}
-              />
+              <TrueFalseSlide q={currentQ} onAnswer={handleAnswer} answered={answered} selected={selected} />
             )}
             {currentQ.type === "order" && (
-              <OrderSlide
-                q={currentQ}
-                onAnswer={handleAnswer}
-                answered={answered}
-                selected={selected}
-              />
+              <OrderSlide q={currentQ} onAnswer={handleAnswer} answered={answered} selected={selected} />
             )}
-
-            {/* NEXT BUTTON */}
             {answered && (
               <button className="btn-next" onClick={handleNext}>
-                {qIndex < questions.length - 1 ? (
-                  <>Next question <ArrowRight size={17} /></>
-                ) : (
-                  <>See results <Trophy size={17} /></>
-                )}
+                {qIndex < questions.length - 1
+                  ? <>Next question <ArrowRight size={17} /></>
+                  : <>See results <Trophy size={17} /></>}
               </button>
             )}
           </div>
@@ -439,10 +362,10 @@ const LessonPage = () => {
 
         {phase === "complete" && (
           <CompletionSlide
-            lessonData={lessonData}
             lessonMeta={lesson}
             score={finalScore}
             total={questions.length}
+            xpEarned={xpEarned}
             onNext={handleNextLesson}
             onRetry={handleRetry}
             onCourse={() => navigate(`/courses/${courseId}`)}
